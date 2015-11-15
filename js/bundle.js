@@ -47,6 +47,41 @@
 	var React    = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(158);
 
+
+	var Repo = React.createClass({displayName: "Repo",
+	  getInitialState: function() {
+	    return {
+	      forks    : "-",
+	      watchers : "-",
+	      fork     : "-"
+	    }
+	  },
+	  componentDidMount: function() {
+	    $.get('https://api.github.com/repos/mariuscoto/' + this.props.name, function(res) {
+	      if (this.isMounted()) {
+	        this.setState({
+	          forks    : res.forks,
+	          watchers : res.watchers,
+	          fork     : res.fork ? res.parent.url : null
+	        });
+	      }
+	    }.bind(this));
+	  },
+
+	  render: function() {
+	    return (
+	      React.createElement("li", null, this.props.name, 
+	        React.createElement("ul", null, 
+	          React.createElement("li", null, "Forked: ", this.state.fork), 
+	          React.createElement("li", null, "Forks: ", this.state.forks), 
+	          React.createElement("li", null, "Watchers: ", this.state.watchers)
+	        )
+	      )
+	    )
+	  }
+	})
+
+
 	var RepoList = React.createClass({displayName: "RepoList",
 	  getInitialState: function() {
 	      return {
@@ -66,17 +101,20 @@
 
 	  render: function() {
 	    return (
-	      React.createElement("ul", null, 
-	       this.state.repos.map(function(repo) {
-	        return (React.createElement("li", null, repo.name))
-	      }, this)
+	      React.createElement("div", null, 
+	        React.createElement("h2", null, "Repos:"), 
+	        React.createElement("ul", null, 
+	         this.state.repos.map(function(repo, i) {
+	          return (React.createElement(Repo, {key: i, name: repo.name}))
+	        }, this)
+	        )
 	      )
 	    );
 	  }
 	});
 
-	//if( $('#main').length )
-	ReactDOM.render(React.createElement(RepoList, null), document.body);
+
+	ReactDOM.render(React.createElement(RepoList, null), document.getElementById("main"));
 
 
 /***/ },
