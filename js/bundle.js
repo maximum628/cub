@@ -53,7 +53,9 @@
 	    return {
 	      forks    : "-",
 	      watchers : "-",
-	      fork     : "-"
+	      fork     : "-",
+	      stars    : "-",
+	      total    : 0
 	    }
 	  },
 	  componentDidMount: function() {
@@ -61,8 +63,10 @@
 	      if (this.isMounted()) {
 	        this.setState({
 	          forks    : res.forks,
-	          watchers : res.watchers,
-	          fork     : res.fork ? res.parent.url : null
+	          watchers : res.watchers_count,
+	          stars    : res.stargazers_count,
+	          fork     : res.fork ? res.parent.url : null,
+	          total    : res.watchers_count * PointsList.watch + res.stargazers_count * PointsList.star
 	        });
 	      }
 	    }.bind(this));
@@ -70,10 +74,11 @@
 
 	  render: function() {
 	    return (
-	      React.createElement("li", null, this.props.name, 
+	      React.createElement("li", null, this.props.name, " [", this.state.total, "]", 
 	        React.createElement("ul", null, 
 	          React.createElement("li", null, "Forked: ", this.state.fork), 
 	          React.createElement("li", null, "Forks: ", this.state.forks), 
+	          React.createElement("li", null, "Stars: ", this.state.stars), 
 	          React.createElement("li", null, "Watchers: ", this.state.watchers)
 	        )
 	      )
@@ -107,6 +112,28 @@
 	         this.state.repos.map(function(repo, i) {
 	          return (React.createElement(Repo, {key: i, name: repo.name}))
 	        }, this)
+	        ), 
+
+	        React.createElement(PointsList, null)
+	      )
+	    );
+	  }
+	});
+
+
+	var PointsList = React.createClass({displayName: "PointsList",
+	  statics: {
+	    watch : 10,
+	    star  : 20
+	  },
+
+	  render: function() {
+	    return (
+	      React.createElement("div", null, 
+	        React.createElement("h2", null, "Points:"), 
+	        React.createElement("ul", null, 
+	          React.createElement("li", null, "Watcher: ", PointsList.watch, "p"), 
+	          React.createElement("li", null, "Star: ", PointsList.star, "p")
 	        )
 	      )
 	    );
