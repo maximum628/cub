@@ -1,3 +1,4 @@
 Django==1.8.6
 django-mongodb-engine==0.6.0
 django-tastypie==0.12.2
+https://github.com/maria/PyGithub/tarball/add-oauth-authentication
