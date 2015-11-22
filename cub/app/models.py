@@ -7,7 +7,7 @@ class Account(mongoengine.Document):
         'indexes': [{'fields': ['username', 'email']}]
     }
 
-    username = mongoengine.StringField(required=True)
+    username = mongoengine.StringField(required=True, unique=True)
     github_token = mongoengine.StringField(required=True)
     name = mongoengine.StringField()
     email = mongoengine.EmailField(required=True)
@@ -49,11 +49,11 @@ class Account(mongoengine.Document):
 class Contribution(mongoengine.Document):
     meta = {
         'abstract': True,
-        'indexes': [{'fields': ['account_id', 'created_date']}],
+        'indexes': [{'fields': ['created_date']}],
         'ordering': ['-created_date']
     }
 
-    account_id = mongoengine.IntField(required=True)
+    account = mongoengine.ReferenceField(Account)
     html_url = mongoengine.URLField(required=True)
     url = mongoengine.URLField(required=True)
     html_repo_url = mongoengine.URLField(required=True)
