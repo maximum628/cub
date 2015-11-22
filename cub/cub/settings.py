@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'app',
     'tastypie',
+    'tastypie_mongoengine',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,12 +89,7 @@ WSGI_APPLICATION = 'cub.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'cub',
-        'USER': 'cub',
-        'PASSWORD': 'cuby',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': '',
     }
 }
 
