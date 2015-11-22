@@ -20,7 +20,7 @@ class AuthenticateGitHubAccount(View):
     def get(self, request):
         token = ConnectGitHub().get_access_token(request.GET['code'])
         github_user = get_github_user_info(token)
-        account = Account.save(github_user)
+        account = Account.check(github_user)
         message = self.login(request, account)
         return redirect("/")
 
