@@ -69,4 +69,26 @@ class CommitContribution(Contribution):
 
 class PRContribution(Contribution):
 
-    state = mongoengine.StringField(required=True)
+    PR_STATES = (('Open', 'open'), ('Closed', 'closed'), ('All', 'all'))
+
+    state = mongoengine.StringField(required=True, choices=PR_STATES)
+
+
+class Repository(mongoengine.Document):
+
+    account = mongoengine.ReferenceField(Account)
+
+    name = mongoengine.StringField(required=True)
+    html_url = mongoengine.URLField(required=True)
+    url = mongoengine.URLField(required=True)
+    created_at = mongoengine.DateTimeField(required=True)
+    updated_at = mongoengine.DateTimeField(required=True)
+    forks_count = mongoengine.IntField(required=True, default=0)
+    stargazers_count = mongoengine.IntField(required=True, default=0)
+    watchers_count = mongoengine.IntField(required=True, default=0)
+
+
+class Score(mongoengine.Document):
+
+    account = mongoengine.ReferenceField(Account)
+    score = mongoengine.IntField(required=True)

@@ -1,6 +1,7 @@
 from tastypie_mongoengine import resources
 
-from app.models import Account, CommitContribution
+from app.models import (Account, CommitContribution, PRContribution, Repository,
+    Score)
 
 
 class AccountResource(resources.MongoEngineResource):
@@ -13,4 +14,16 @@ class AccountResource(resources.MongoEngineResource):
 class CommitContributionResource(resources.MongoEngineResource):
     class Meta:
         queryset = CommitContribution.objects.all()
+        allowed_methods = ['get']
+
+
+class PRContributionResource(resources.MongoEngineResource):
+    class Meta:
+        queryset = PRContribution.objects.all()
+        allowed_methods = ['get']
+
+
+class RepositoryResource(resources.MongoEngineResource):
+    class Meta:
+        queryset = Repository.objects.all()
         allowed_methods = ['get']
