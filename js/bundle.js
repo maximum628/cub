@@ -141,7 +141,60 @@
 	});
 
 
+	var Profile = React.createClass({displayName: "Profile",
+	  getInitialState: function() {
+	      return {
+	        avatar_url : null,
+	        name       : null,
+	        username   : null
+	      }
+	  },
+
+	  componentDidMount: function() {
+	    $.get('https://api.github.com/users/mariuscoto', function(res) {
+	      if (this.isMounted()) {
+	        this.setState({
+	          avatar_url : res.avatar_url,
+	          name       : res.name,
+	          username   : res.login
+	        });
+	      }
+	    }.bind(this));
+	  },
+
+	  render: function() {
+	    return (
+	      React.createElement("div", {id: "profile"}, 
+	        React.createElement("div", {id: "profile-avatar"}, 
+	          React.createElement("img", {className: "avatar", src: this.state.avatar_url}), 
+	          React.createElement("div", {id: "name"}, 
+	            React.createElement("a", {href: 'http://github.com/' + this.state.username}, this.state.name)
+	          ), 
+	          React.createElement("div", {id: "username"}, this.state.username)
+	        )
+	      )
+	    )
+	  }
+	})
+
+
+	var Nav = React.createClass({displayName: "Nav",
+	  render: function() {
+	    return (
+	      React.createElement("div", {id: "top-nav"}, 
+	        React.createElement("ul", null, 
+	          React.createElement("li", null, React.createElement("a", {href: "#"}, "Repos")), 
+	          React.createElement("li", null, React.createElement("a", {href: "#"}, "Badges")), 
+	          React.createElement("li", null, React.createElement("a", {href: "#"}, "Contact"))
+	        )
+	      )
+	    )
+	  }
+	})
+
 	ReactDOM.render(React.createElement(RepoList, null), document.getElementById("main"));
+	ReactDOM.render(React.createElement(Profile, null), document.getElementById("top-body"));
+	ReactDOM.render(React.createElement(Nav, null), document.getElementById("top-tail"));
 
 
 /***/ },
