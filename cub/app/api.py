@@ -1,10 +1,11 @@
+from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
 from app.models import (Account, CommitContribution, PRContribution, Repository,
     Score)
 
 
-class AccountResource(resources.MongoEngineResource):
+class AccountResource(ModelResource):
     class Meta:
         queryset = Account.objects.all()
         excludes = ['github_token', 'id']

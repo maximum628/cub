@@ -1,23 +1,25 @@
 from django.contrib.auth.hashers import make_password, check_password
+from django.db import models
 import mongoengine
 
-class Account(mongoengine.Document):
 
-    meta = {
-        'indexes': [{'fields': ['username', 'email']}]
-    }
+class Account(models.Model):
 
-    username = mongoengine.StringField(required=True, unique=True)
-    github_token = mongoengine.StringField(required=True)
-    name = mongoengine.StringField()
-    email = mongoengine.EmailField(required=True)
-    github_url = mongoengine.URLField(required=True)
-    avatar_url = mongoengine.URLField()
+    class Meta:
+        app_label = 'app'
+
+    username = models.CharField(max_length=128, blank=False)
+    name = models.CharField(max_length=128)
+    email = models.CharField(max_length=128, blank=False)
+    github_token = models.TextField(blank=False)
+    github_url = models.URLField(blank=False)
+    avatar_url = models.URLField()
 
     @classmethod
-    def check(cls, data):
+    def verify(cls, data):
         if Account.objects.filter(username=data['username'], email=data['email']):
-            account = Account.objects.get(username=data['username'], email=data['email'])
+            account = Account.objects.get(
+                username=data['username'], email=data['email'])
 
             if not check_password(data['github_token'], account.github_token):
                 account.github_token = make_password(data['github_token'])
@@ -31,19 +33,11 @@ class Account(mongoengine.Document):
         account = Account(
             username=data['username'], name=data['name'],
             email=data['email'], github_url=data['github_url'],
-            avatar_url=data['avatar_url'])
+            avatar_url=data['avatar_url'], github_token=data['github_token'])
 
         account.github_token = make_password(data['github_token'])
         account.save()
         return account
-
-    @classmethod
-    def authorize(cls, username, password):
-        if Account.objects.filter(username=username):
-            account = Account.objects.get(username=username)
-            if check_password(password, account.github_token):
-                return account
-        return None
 
 
 class Contribution(mongoengine.Document):
@@ -53,7 +47,7 @@ class Contribution(mongoengine.Document):
         'ordering': ['-created_date']
     }
 
-    account = mongoengine.ReferenceField(Account)
+    account = mongoengine.StringField(required=True)
     html_url = mongoengine.URLField(required=True)
     url = mongoengine.URLField(required=True)
     html_repo_url = mongoengine.URLField(required=True)
@@ -76,8 +70,7 @@ class PRContribution(Contribution):
 
 class Repository(mongoengine.Document):
 
-    account = mongoengine.ReferenceField(Account)
-
+    account = mongoengine.StringField(required=True)
     name = mongoengine.StringField(required=True)
     html_url = mongoengine.URLField(required=True)
     url = mongoengine.URLField(required=True)
@@ -90,5 +83,5 @@ class Repository(mongoengine.Document):
 
 class Score(mongoengine.Document):
 
-    account = mongoengine.ReferenceField(Account)
+    account = mongoengine.StringField(required=True)
     score = mongoengine.IntField(required=True)
