@@ -35,6 +35,7 @@ class AuthenticateGitHubAccount(View):
         else:
             return {'message': "Error logging you in."}
 
+
 class LogoutGitHubAccount(View):
 
     def get(self, request):

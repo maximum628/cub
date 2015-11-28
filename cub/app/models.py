@@ -49,7 +49,7 @@ class Contribution(mongoengine.Document):
         'ordering': ['-created_date']
     }
 
-    account = mongoengine.StringField(required=True)
+    cub_account = mongoengine.StringField(required=True)
     html_url = mongoengine.URLField(required=True)
     url = mongoengine.URLField(required=True)
     html_repo_url = mongoengine.URLField(required=True)
@@ -72,7 +72,7 @@ class PRContribution(Contribution):
 
 class Repository(mongoengine.Document):
 
-    account = mongoengine.StringField(required=True)
+    cub_account = mongoengine.StringField(required=True)
     name = mongoengine.StringField(required=True)
     html_url = mongoengine.URLField(required=True)
     url = mongoengine.URLField(required=True)
@@ -82,8 +82,24 @@ class Repository(mongoengine.Document):
     stargazers_count = mongoengine.IntField(required=True, default=0)
     watchers_count = mongoengine.IntField(required=True, default=0)
 
+    @classmethod
+    def create_or_update(cls, raw_data, account):
+        repo = Repository(
+            cub_account="{0}".format(account.email),
+            name=raw_data['name'],
+            html_url=raw_data['html_url'],
+            url=raw_data['url'],
+            created_at=raw_data['created_at'],
+            updated_at=raw_data['updated_at'],
+            forks_count=raw_data['forks_count'],
+            stargazers_count=raw_data['stargazers_count'],
+            watchers_count=raw_data['watchers_count']
+        )
+        repo.save()
+        return repo
+
 
 class Score(mongoengine.Document):
 
-    account = mongoengine.StringField(required=True)
+    cub_account = mongoengine.StringField(required=True)
     score = mongoengine.IntField(required=True)
