@@ -1,12 +1,17 @@
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-from django.views.generic import View
+from django.shortcuts import redirect, render
+from django.views.generic import View, TemplateView
 
 from app.contribution import get_repos
 from app.helpers import get_github_user_info
 from app.models import Account
 from app.oauth_github import ConnectGitHub
+
+
+class Home(TemplateView):
+    def get(self, request):
+        return render(request, 'index.html', {})
 
 
 class AuthorizeGitHubURL(View):
@@ -34,6 +39,7 @@ class AuthenticateGitHubAccount(View):
             return {'message': "You successfully logged in."}
         else:
             return {'message': "Error logging you in."}
+
 
 
 class LogoutGitHubAccount(View):
