@@ -1,4 +1,5 @@
 *.pyc
+*.sqlite3
 .vagrant
 *.DS_Store
 node_modules
