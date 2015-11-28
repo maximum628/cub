@@ -1,17 +1,18 @@
-from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 import mongoengine
 
 
-class Account(models.Model):
+class Account(AbstractUser):
 
     class Meta:
         app_label = 'app'
 
-    username = models.CharField(max_length=128, blank=False)
-    name = models.CharField(max_length=128)
-    email = models.CharField(max_length=128, blank=False)
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ('email', 'github_token')
+
     github_token = models.TextField(blank=False)
+    name = models.CharField(max_length=128)
     github_url = models.URLField(blank=False)
     avatar_url = models.URLField()
 
@@ -21,8 +22,9 @@ class Account(models.Model):
             account = Account.objects.get(
                 username=data['username'], email=data['email'])
 
-            if not check_password(data['github_token'], account.github_token):
-                account.github_token = make_password(data['github_token'])
+            if data['github_token'] != account.github_token:
+                account.set_password(data['github_token'])
+                account.github_token = data['github_token']
                 account.save()
             return account
         else:
@@ -35,7 +37,7 @@ class Account(models.Model):
             email=data['email'], github_url=data['github_url'],
             avatar_url=data['avatar_url'], github_token=data['github_token'])
 
-        account.github_token = make_password(data['github_token'])
+        account.set_password(data['github_token'])
         account.save()
         return account
 
