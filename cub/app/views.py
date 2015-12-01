@@ -47,13 +47,3 @@ class LogoutGitHubAccount(View):
     def get(self, request):
         logout(request)
         return redirect("/")
-
-
-class RepositoryView(View):
-
-    def get(self, request):
-        if not request.user.is_authenticated():
-            return HttpResponseRedirect('authorize/')
-        account = Account.objects.get(username=request.user.username)
-        get_repos(account)
-        return redirect("/api/v1/repository/?format=json")

@@ -7,7 +7,7 @@ from tastypie.api import Api
 from app.api import (AccountResource, CommitContributionResource,
     PRContributionResource, RepositoryResource)
 from app.views import (AuthorizeGitHubURL, AuthenticateGitHubAccount,
-    LogoutGitHubAccount, RepositoryView, Home)
+    LogoutGitHubAccount, Home)
 
 v1_api = Api(api_name='v1')
 v1_api.register(AccountResource())
@@ -21,8 +21,7 @@ urlpatterns = [
     url(r'^api/', include(v1_api.urls)),
     url(r'^authorize/', AuthorizeGitHubURL.as_view(), name='authorize'),
     url(r'^authenticate/', AuthenticateGitHubAccount.as_view(), name='authenticate'),
-    url(r'^logout/', LogoutGitHubAccount.as_view(), name='logout'),
-    url(r'^repository/', RepositoryView.as_view())
+    url(r'^logout/', LogoutGitHubAccount.as_view(), name='logout')
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
