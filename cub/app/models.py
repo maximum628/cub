@@ -45,16 +45,15 @@ class Account(AbstractUser):
 class Contribution(mongoengine.Document):
     meta = {
         'abstract': True,
-        'indexes': [{'fields': ['created_date']}],
-        'ordering': ['-created_date']
+        'indexes': [{'fields': ['updated_at']}],
+        'ordering': ['-updated_at']
     }
 
     cub_account = mongoengine.StringField(required=True)
     html_url = mongoengine.URLField(required=True)
     url = mongoengine.URLField(required=True)
     html_repo_url = mongoengine.URLField(required=True)
-    repo_url = mongoengine.URLField(required=True)
-    created_date = mongoengine.DateTimeField(required=True)
+    updated_at = mongoengine.DateTimeField(required=True)
     stats = mongoengine.DictField()
 
 
@@ -65,12 +64,29 @@ class CommitContribution(Contribution):
 
 class PRContribution(Contribution):
 
-    PR_STATES = (('Open', 'open'), ('Closed', 'closed'), ('All', 'all'))
+    title = mongoengine.StringField(required=True)
+    state = mongoengine.StringField(required=True)
 
-    state = mongoengine.StringField(required=True, choices=PR_STATES)
+    @classmethod
+    def create_or_update(cls, raw_data, account):
+        pr = PRContribution(
+            cub_account="{0}".format(account.email),
+            html_url=raw_data['html_url'],
+            url=raw_data['url'],
+            html_repo_url=raw_data['html_url'].split('pull')[0],
+            updated_at=raw_data['updated_at'],
+            title=raw_data['title'],
+            state=raw_data['state'])
+        pr.save()
+        return pr
 
 
 class Repository(mongoengine.Document):
+
+    meta = {
+        'indexes': [{'fields': ['updated_at']}],
+        'ordering': ['-updated_at']
+    }
 
     cub_account = mongoengine.StringField(required=True)
     name = mongoengine.StringField(required=True)
