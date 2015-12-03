@@ -27,6 +27,7 @@ class CommitContributionResource(resources.MongoEngineResource):
 class PRContributionResource(resources.MongoEngineResource):
     class Meta:
         queryset = PRContribution.objects.all()
+        resource_name = 'pulls'
         allowed_methods = ['get']
         authentication = SessionAuthentication()
 
