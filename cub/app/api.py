@@ -1,5 +1,5 @@
 from tastypie.authentication import SessionAuthentication
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import Authorization, DjangoAuthorization
 from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
@@ -22,6 +22,7 @@ class CommitContributionResource(resources.MongoEngineResource):
         queryset = CommitContribution.objects.all()
         allowed_methods = ['get']
         authentication = SessionAuthentication()
+        authorization = Authorization()
 
 
 class PRContributionResource(resources.MongoEngineResource):
@@ -30,10 +31,19 @@ class PRContributionResource(resources.MongoEngineResource):
         resource_name = 'pulls'
         allowed_methods = ['get']
         authentication = SessionAuthentication()
+        authorization = Authorization()
 
 
 class RepositoryResource(resources.MongoEngineResource):
     class Meta:
         queryset = Repository.objects.all()
         allowed_methods = ['get']
+        authentication = SessionAuthentication()
+
+
+class ScoreResource(resources.MongoEngineResource):
+    class Meta:
+        queryset = Score.objects.all()
+        allowed_methods = ['get']
+        excludes = ['live_score']
         authentication = SessionAuthentication()

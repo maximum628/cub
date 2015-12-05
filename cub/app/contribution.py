@@ -1,7 +1,8 @@
 import simplejson
 from github import Github
 
-from app.models import Repository, PRContribution
+from app.models import Repository, PRContribution, Score
+
 
 def get_repos(account):
     """Save account public repositories data. """
@@ -25,3 +26,7 @@ def get_pulls(account):
 
 def get_commits(account):
     pass
+
+
+def get_live_score(account):
+    return Score.compute(account.email)

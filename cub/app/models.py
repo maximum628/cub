@@ -69,17 +69,13 @@ class PRContribution(Contribution):
 
     @classmethod
     def create_or_update(cls, raw_data, account):
-        cub_account = "{0}".format(account.email)
-
         if PRContribution.objects(
-                cub_account=cub_account, html_url=raw_data['html_url']):
+                cub_account=account.email, html_url=raw_data['html_url']):
 
             pr = PRContribution.objects.get(
-                    cub_account=cub_account, html_url=raw_data['html_url'])
+                    cub_account=account.email, html_url=raw_data['html_url'])
 
             pr = pr.modify(
-                cub_account=cub_account,
-                html_url=raw_data['html_url'],
                 url=raw_data['url'],
                 html_repo_url=raw_data['html_url'].split('pull')[0],
                 updated_at=raw_data['updated_at'],
@@ -87,7 +83,7 @@ class PRContribution(Contribution):
                 state=raw_data['state'])
         else:
             pr = PRContribution(
-                cub_account=cub_account,
+                cub_account=account.email,
                 html_url=raw_data['html_url'],
                 url=raw_data['url'],
                 html_repo_url=raw_data['html_url'].split('pull')[0],
@@ -116,18 +112,14 @@ class Repository(mongoengine.Document):
 
     @classmethod
     def create_or_update(cls, raw_data, account):
-        cub_account = "{0}".format(account.email)
-
         if Repository.objects(
-                cub_account=cub_account, html_url=raw_data['html_url']):
+                cub_account=account.email, html_url=raw_data['html_url']):
 
             repo = Repository.objects.get(
-                    cub_account=cub_account, html_url=raw_data['html_url'])
+                    cub_account=account.email, html_url=raw_data['html_url'])
 
             repo = repo.modify(
-                cub_account=cub_account,
                 name=raw_data['name'],
-                html_url=raw_data['html_url'],
                 url=raw_data['url'],
                 created_at=raw_data['created_at'],
                 updated_at=raw_data['updated_at'],
@@ -136,7 +128,7 @@ class Repository(mongoengine.Document):
                 watchers_count=raw_data['watchers_count'])
         else:
             repo = Repository(
-                cub_account=cub_account,
+                cub_account=account.email,
                 name=raw_data['name'],
                 html_url=raw_data['html_url'],
                 url=raw_data['url'],
@@ -150,5 +142,29 @@ class Repository(mongoengine.Document):
 
 class Score(mongoengine.Document):
 
-    cub_account = mongoengine.StringField(required=True)
+    cub_account = mongoengine.StringField(required=True, unique=True)
     score = mongoengine.IntField(required=True)
+
+    @classmethod
+    def compute(cls, email):
+        watchers, stargazers_count, forks = Score.get_repo_stats(email)
+        live_score =  watchers + stargazers_count + forks
+
+        if Score.objects(cub_account=email):
+            score = Score.objects.get(cub_account=email).modify(score=live_score)
+        else:
+            score = Score(cub_account=email, score=live_score).save()
+        return score
+
+    @classmethod
+    def get_repo_stats(cls, email):
+        watchers = 0
+        stargazers = 0
+        forks = 0
+
+        for repo in Repository.objects(cub_account=email):
+            watchers += repo.watchers_count
+            stargazers += repo.stargazers_count
+            forks += repo.forks_count
+
+        return watchers, stargazers, forks
