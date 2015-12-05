@@ -21,3 +21,7 @@ def get_pulls(account):
 
     for pull in pulls:
         PRContribution.create_or_update(pull.raw_data, account)
+
+
+def get_commits(account):
+    pass

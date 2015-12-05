@@ -50,7 +50,7 @@ class Contribution(mongoengine.Document):
     }
 
     cub_account = mongoengine.StringField(required=True)
-    html_url = mongoengine.URLField(required=True)
+    html_url = mongoengine.URLField(required=True, unique_with='cub_account')
     url = mongoengine.URLField(required=True)
     html_repo_url = mongoengine.URLField(required=True)
     updated_at = mongoengine.DateTimeField(required=True)
@@ -69,15 +69,31 @@ class PRContribution(Contribution):
 
     @classmethod
     def create_or_update(cls, raw_data, account):
-        pr = PRContribution(
-            cub_account="{0}".format(account.email),
-            html_url=raw_data['html_url'],
-            url=raw_data['url'],
-            html_repo_url=raw_data['html_url'].split('pull')[0],
-            updated_at=raw_data['updated_at'],
-            title=raw_data['title'],
-            state=raw_data['state'])
-        pr.save()
+        cub_account = "{0}".format(account.email)
+
+        if PRContribution.objects(
+                cub_account=cub_account, html_url=raw_data['html_url']):
+
+            pr = PRContribution.objects.get(
+                    cub_account=cub_account, html_url=raw_data['html_url'])
+
+            pr = pr.modify(
+                cub_account=cub_account,
+                html_url=raw_data['html_url'],
+                url=raw_data['url'],
+                html_repo_url=raw_data['html_url'].split('pull')[0],
+                updated_at=raw_data['updated_at'],
+                title=raw_data['title'],
+                state=raw_data['state'])
+        else:
+            pr = PRContribution(
+                cub_account=cub_account,
+                html_url=raw_data['html_url'],
+                url=raw_data['url'],
+                html_repo_url=raw_data['html_url'].split('pull')[0],
+                updated_at=raw_data['updated_at'],
+                title=raw_data['title'],
+                state=raw_data['state']).save()
         return pr
 
 
@@ -90,7 +106,7 @@ class Repository(mongoengine.Document):
 
     cub_account = mongoengine.StringField(required=True)
     name = mongoengine.StringField(required=True)
-    html_url = mongoengine.URLField(required=True)
+    html_url = mongoengine.URLField(required=True, unique_with='cub_account')
     url = mongoengine.URLField(required=True)
     created_at = mongoengine.DateTimeField(required=True)
     updated_at = mongoengine.DateTimeField(required=True)
@@ -100,18 +116,35 @@ class Repository(mongoengine.Document):
 
     @classmethod
     def create_or_update(cls, raw_data, account):
-        repo = Repository(
-            cub_account="{0}".format(account.email),
-            name=raw_data['name'],
-            html_url=raw_data['html_url'],
-            url=raw_data['url'],
-            created_at=raw_data['created_at'],
-            updated_at=raw_data['updated_at'],
-            forks_count=raw_data['forks_count'],
-            stargazers_count=raw_data['stargazers_count'],
-            watchers_count=raw_data['watchers_count']
-        )
-        repo.save()
+        cub_account = "{0}".format(account.email)
+
+        if Repository.objects(
+                cub_account=cub_account, html_url=raw_data['html_url']):
+
+            repo = Repository.objects.get(
+                    cub_account=cub_account, html_url=raw_data['html_url'])
+
+            repo = repo.modify(
+                cub_account=cub_account,
+                name=raw_data['name'],
+                html_url=raw_data['html_url'],
+                url=raw_data['url'],
+                created_at=raw_data['created_at'],
+                updated_at=raw_data['updated_at'],
+                forks_count=raw_data['forks_count'],
+                stargazers_count=raw_data['stargazers_count'],
+                watchers_count=raw_data['watchers_count'])
+        else:
+            repo = Repository(
+                cub_account=cub_account,
+                name=raw_data['name'],
+                html_url=raw_data['html_url'],
+                url=raw_data['url'],
+                created_at=raw_data['created_at'],
+                updated_at=raw_data['updated_at'],
+                forks_count=raw_data['forks_count'],
+                stargazers_count=raw_data['stargazers_count'],
+                watchers_count=raw_data['watchers_count']).save()
         return repo
 
 
