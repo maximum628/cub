@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic import View, TemplateView
 
-from app.contribution import get_repos
+from app.contribution import get_repos, get_pulls, get_live_score
 from app.helpers import get_github_user_info
 from app.models import Account
 from app.oauth_github import ConnectGitHub
@@ -41,9 +41,20 @@ class AuthenticateGitHubAccount(View):
             return {'message': "Error logging you in."}
 
 
-
 class LogoutGitHubAccount(View):
 
     def get(self, request):
         logout(request)
         return redirect("/")
+
+
+class Contributions(View):
+
+    def get(self, request):
+        account = Account.objects.get(username=request.user.username)
+
+        get_repos(account)
+        get_pulls(account)
+        get_live_score(account)
+
+        return redirect('/')

@@ -5,15 +5,17 @@ from django.contrib import admin
 from tastypie.api import Api
 
 from app.api import (AccountResource, CommitContributionResource,
-    PRContributionResource, RepositoryResource)
+    PRContributionResource, RepositoryResource, ScoreResource)
 from app.views import (AuthorizeGitHubURL, AuthenticateGitHubAccount,
-    LogoutGitHubAccount, Home)
+    LogoutGitHubAccount, Home, Contributions)
 
 v1_api = Api(api_name='v1')
 v1_api.register(AccountResource())
 v1_api.register(CommitContributionResource())
 v1_api.register(PRContributionResource())
 v1_api.register(RepositoryResource())
+v1_api.register(ScoreResource())
+
 
 urlpatterns = [
     url(r'^$', Home.as_view(), name='home'),
@@ -21,7 +23,8 @@ urlpatterns = [
     url(r'^api/', include(v1_api.urls)),
     url(r'^authorize/', AuthorizeGitHubURL.as_view(), name='authorize'),
     url(r'^authenticate/', AuthenticateGitHubAccount.as_view(), name='authenticate'),
-    url(r'^logout/', LogoutGitHubAccount.as_view(), name='logout')
+    url(r'^logout/', LogoutGitHubAccount.as_view(), name='logout'),
+    url(r'^contribution/', Contributions.as_view(), name='contrib'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
