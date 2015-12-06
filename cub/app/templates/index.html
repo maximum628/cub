@@ -5,15 +5,26 @@
   <head>
     <title>CUB App</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:400|Roboto Slab:400|Bitter:400|Changa One:400|Droid Sans:400|Droid Serif:400|Exo:400|Great Vibes:400|Inconsolata:400|Lato:400|Merriweather:400|Montserrat:400|Open Sans:400|Oswald:400|PT Sans:400|PT Serif:400|Ubuntu:400|Varela:400|Varela Round:400|Vollkorn:400&amp;text=Robt SlaBierChngODdsfExGVIcLMwpPTUuk">
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
     <script type="text/javascript", src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/jquery.js"></script>
   </head>
 
   <body>
-    <div id="top">
-      <div id="top-head"></div>
-      <div id="top-body"></div>
-      <div id="top-tail"></div>
+    <div id="head">
+      <div id="head-box">
+        <div id="logo">
+          <a href="#"> CUB </a>
+        </div>
+        <nav id="nav">
+          <a href="#"> About </a>
+          <a href="#"> Score </a>
+          <a href="#"> Skills </a>
+          <a href="#"> Badges </a>
+          <a href="#"> Contact </a>
+          <a href="/authorize"> Login </a>
+        </div>
+      </div>
     </div>
     <div id="main"></div>
     <script type="text/javascript", src="{% static 'js/bundle.js' %}"></script>

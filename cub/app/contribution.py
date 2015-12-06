@@ -1,4 +1,3 @@
-import simplejson
 from github import Github
 
 from app.models import Repository, PRContribution, Score

@@ -1,8 +1,28 @@
 body {
   margin: 0px;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Roboto Slab', sans-serif;
 }
 
+#head {
+
+}
+
+#head-box {
+  width: 60%;
+  margin: 0px auto 0px auto;
+}
+
+#logo {
+  float: left;
+  margin-right: 60%;
+}
+
+#main {
+
+}
+
+
+############################
 #top-head {
   min-height: 50px;
   background-color: #7A9F35;

@@ -5,37 +5,18 @@ var USER = 'mariuscoto'
 
 
 var Repo = React.createClass({
-  getInitialState: function() {
-    return {
-      forks    : "-",
-      watchers : "-",
-      fork     : "-",
-      stars    : "-",
-      total    : 0
-    }
-  },
-  componentDidMount: function() {
-    $.get('https://api.github.com/repos/' + this.props.user + '/' + this.props.name, function(res) {
-      if (this.isMounted()) {
-        this.setState({
-          forks    : res.forks,
-          watchers : res.watchers_count,
-          stars    : res.stargazers_count,
-          fork     : res.fork ? res.parent.url : null,
-          total    : res.watchers_count * PointsList.watch + res.stargazers_count * PointsList.star
-        });
-      }
-    }.bind(this));
-  },
-
   render: function() {
+    var repo_score = this.props.repo.watchers_count * PointsList.watch;
+    repo_score += this.props.repo.stargazers_count * PointsList.star;
+
     return (
-      <li>{this.props.name} [{this.state.total}]
+      <li>
+        <a href={this.props.repo.html_url}>{this.props.repo.name}</a> [{repo_score}]
         <ul>
-          <li>Forked: {this.state.fork}</li>
-          <li>Forks: {this.state.forks}</li>
-          <li>Stars: {this.state.stars}</li>
-          <li>Watchers: {this.state.watchers}</li>
+          <li>Forked: ??</li>
+          <li>Forks: {this.props.repo.forks_count}</li>
+          <li>Stars: {this.props.repo.stargazers_count}</li>
+          <li>Watchers: {this.props.repo.watchers_count}</li>
         </ul>
       </li>
     )
@@ -51,10 +32,10 @@ var RepoList = React.createClass({
   },
 
   componentDidMount: function() {
-    $.get('https://api.github.com/users/' + this.props.user + '/repos', function(res) {
+    $.get('/api/v1/repository/?offset=0&limit=100&format=json', function(res) {
       if (this.isMounted()) {
         this.setState({
-          repos: res
+          repos: res.objects
         });
       }
     }.bind(this));
@@ -66,7 +47,7 @@ var RepoList = React.createClass({
         <h2>Repos:</h2>
         <ul>
         { this.state.repos.map(function(repo, i) {
-          return (<Repo user={this.props.user} key={i} name={repo.name} />)
+          return (<Repo repo={repo} key={i} />)
         }, this)}
         </ul>
 
