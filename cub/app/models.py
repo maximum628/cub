@@ -70,10 +70,10 @@ class PRContribution(Contribution):
     @classmethod
     def create_or_update(cls, raw_data, account):
         if PRContribution.objects(
-                cub_account=account.email, html_url=raw_data['html_url']):
+                cub_account=account, html_url=raw_data['html_url']):
 
             pr = PRContribution.objects.get(
-                    cub_account=account.email, html_url=raw_data['html_url'])
+                    cub_account=account, html_url=raw_data['html_url'])
 
             pr = pr.modify(
                 url=raw_data['url'],
@@ -83,7 +83,7 @@ class PRContribution(Contribution):
                 state=raw_data['state'])
         else:
             pr = PRContribution(
-                cub_account=account.email,
+                cub_account=account,
                 html_url=raw_data['html_url'],
                 url=raw_data['url'],
                 html_repo_url=raw_data['html_url'].split('pull')[0],
@@ -113,10 +113,10 @@ class Repository(mongoengine.Document):
     @classmethod
     def create_or_update(cls, raw_data, account):
         if Repository.objects(
-                cub_account=account.email, html_url=raw_data['html_url']):
+                cub_account=account, html_url=raw_data['html_url']):
 
             repo = Repository.objects.get(
-                    cub_account=account.email, html_url=raw_data['html_url'])
+                    cub_account=account, html_url=raw_data['html_url'])
 
             repo = repo.modify(
                 name=raw_data['name'],
@@ -128,7 +128,7 @@ class Repository(mongoengine.Document):
                 watchers_count=raw_data['watchers_count'])
         else:
             repo = Repository(
-                cub_account=account.email,
+                cub_account=account,
                 name=raw_data['name'],
                 html_url=raw_data['html_url'],
                 url=raw_data['url'],
@@ -146,23 +146,23 @@ class Score(mongoengine.Document):
     score = mongoengine.IntField(required=True)
 
     @classmethod
-    def compute(cls, email):
-        watchers, stargazers_count, forks = Score.get_repo_stats(email)
+    def compute(cls, account):
+        watchers, stargazers_count, forks = Score.get_repo_stats(account)
         live_score =  watchers + stargazers_count + forks
 
-        if Score.objects(cub_account=email):
-            score = Score.objects.get(cub_account=email).modify(score=live_score)
+        if Score.objects(cub_account=account):
+            score = Score.objects.get(cub_account=account).modify(score=live_score)
         else:
-            score = Score(cub_account=email, score=live_score).save()
+            score = Score(cub_account=account, score=live_score).save()
         return score
 
     @classmethod
-    def get_repo_stats(cls, email):
+    def get_repo_stats(cls, account):
         watchers = 0
         stargazers = 0
         forks = 0
 
-        for repo in Repository.objects(cub_account=email):
+        for repo in Repository.objects(cub_account=account):
             watchers += repo.watchers_count
             stargazers += repo.stargazers_count
             forks += repo.forks_count
