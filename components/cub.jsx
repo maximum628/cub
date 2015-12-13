@@ -1,8 +1,12 @@
 var React    = require('react');
 var ReactDOM = require('react-dom');
 
-var USER = 'mariuscoto'
+var History = require('history');
+var Router = require('react-router').Router;
+var Route = require('react-router').Route;
+var Link = require('react-router').Link;
 
+const history = History.createHistory();
 
 var Repo = React.createClass({
   render: function() {
@@ -10,15 +14,22 @@ var Repo = React.createClass({
     repo_score += this.props.repo.stargazers_count * PointsList.star;
 
     return (
-      <li>
-        <a href={this.props.repo.html_url}>{this.props.repo.name}</a> [{repo_score}]
+      <div className="repo-item">
+        <div className="repo-score">
+          <div className="repo-score-points">{repo_score}</div>
+          <div className="repo-score-text">Points</div>
+        </div>
+        <div className="repo-name">
+          <a href={this.props.repo.html_url}>{this.props.repo.name}</a>
+        </div>
+        <div className="repo-description">The description of the repo...</div>
         <ul>
           <li>Forked: ??</li>
           <li>Forks: {this.props.repo.forks_count}</li>
           <li>Stars: {this.props.repo.stargazers_count}</li>
           <li>Watchers: {this.props.repo.watchers_count}</li>
         </ul>
-      </li>
+      </div>
     )
   }
 })
@@ -44,12 +55,10 @@ var RepoList = React.createClass({
   render: function() {
     return (
       <div>
-        <h2>Repos:</h2>
-        <ul>
+        <h1>Your contributions</h1>
         { this.state.repos.map(function(repo, i) {
           return (<Repo repo={repo} key={i} />)
         }, this)}
-        </ul>
 
         <PointsList />
       </div>
@@ -89,13 +98,13 @@ var Profile = React.createClass({
   },
 
   componentDidMount: function() {
-    $.get('https://api.github.com/users/' + this.props.user, function(res) {
+    $.get('/api/v1/account/?format=json', function(res) {
       if (this.isMounted()) {
         this.setState({
-          avatar_url : res.avatar_url,
-          name       : res.name,
-          username   : res.login,
-          email      : res.email
+          avatar_url : res.objects[0].avatar_url,
+          name       : res.objects[0].name,
+          username   : res.objects[0].login,
+          email      : res.objects[0].email
         });
       }
     }.bind(this));
@@ -123,18 +132,63 @@ var Profile = React.createClass({
 var Nav = React.createClass({
   render: function() {
     return (
-      <div id='top-nav'>
-        <ul>
-          <li><a href='#'>Repos</a></li>
-          <li><a href='#'>Badges</a></li>
-          <li><a href='#'>Contact</a></li>
-        </ul>
+      <div id="head">
+        <div id="head-box">
+          <div id="logo">
+            <a href="#"> CUB </a>
+          </div>
+          <nav id="nav">
+            <li><Link to='/profile'>Profile</Link></li>
+            <li><Link to='/'>Repos</Link></li>
+            <li><Link to='/contact'>Contact</Link></li>
+          </nav>
+        </div>
       </div>
     )
   }
 })
 
 
-ReactDOM.render(<RepoList user={USER} />, document.getElementById("main"));
-ReactDOM.render(<Profile user={USER} />, document.getElementById("top-body"));
-ReactDOM.render(<Nav />, document.getElementById("top-tail"));
+var RepoPage = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <Nav />
+        <RepoList />
+      </div>
+    )
+  }
+})
+
+
+var ContactPage = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <Nav />
+        <h1>Get in touch</h1>
+      </div>
+    )
+  }
+})
+
+
+var ProfilePage = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <Nav />
+        <Profile />
+      </div>
+    )
+  }
+})
+
+
+ReactDOM.render((
+  <Router history={history}>
+    <Route path="/profile" component={ProfilePage} />
+    <Route path="/" component={RepoPage} />
+    <Route path="/contact" component={ContactPage} />
+  </Router>
+), document.getElementById("main"))
