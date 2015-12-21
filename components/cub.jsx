@@ -135,7 +135,7 @@ var Nav = React.createClass({
       <div id="head">
         <div id="head-box">
           <div id="logo">
-            <a href="#"> CUB </a>
+            <a href="/"> CUB </a>
           </div>
           <nav id="nav">
             <li><Link to='/profile'>Profile</Link></li>

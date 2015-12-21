@@ -18,13 +18,13 @@ v1_api.register(ScoreResource())
 
 
 urlpatterns = [
-    url(r'^$', Home.as_view(), name='home'),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(v1_api.urls)),
     url(r'^authorize/', AuthorizeGitHubURL.as_view(), name='authorize'),
     url(r'^authenticate/', AuthenticateGitHubAccount.as_view(), name='authenticate'),
     url(r'^logout/', LogoutGitHubAccount.as_view(), name='logout'),
     url(r'^contribution/', Contributions.as_view(), name='contrib'),
+    url(r'^[\w]*', Home.as_view(), name='home'),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
