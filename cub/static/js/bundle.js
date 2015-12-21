@@ -68,7 +68,7 @@
 	        React.createElement("div", {className: "repo-name"}, 
 	          React.createElement("a", {href: this.props.repo.html_url}, this.props.repo.name)
 	        ), 
-	        React.createElement("div", {className: "repo-description"}, "The description of the repo..."), 
+	        React.createElement("div", {className: "repo-description"}, this.props.repo.description), 
 	        React.createElement("ul", null, 
 	          React.createElement("li", null, "Forked: ??"), 
 	          React.createElement("li", null, "Forks: ", this.props.repo.forks_count), 

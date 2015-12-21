@@ -22,7 +22,7 @@ var Repo = React.createClass({
         <div className="repo-name">
           <a href={this.props.repo.html_url}>{this.props.repo.name}</a>
         </div>
-        <div className="repo-description">The description of the repo...</div>
+        <div className="repo-description">{this.props.repo.description}</div>
         <ul>
           <li>Forked: ??</li>
           <li>Forks: {this.props.repo.forks_count}</li>
