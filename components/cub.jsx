@@ -24,7 +24,7 @@ var Repo = React.createClass({
         </div>
         <div className="repo-description">{this.props.repo.description}</div>
         <ul>
-          <li>Forked: ??</li>
+          <li>Forked: {this.props.repo.fork}</li>
           <li>Forks: {this.props.repo.forks_count}</li>
           <li>Stars: {this.props.repo.stargazers_count}</li>
           <li>Watchers: {this.props.repo.watchers_count}</li>
