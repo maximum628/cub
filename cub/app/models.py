@@ -106,6 +106,7 @@ class Repository(mongoengine.Document):
     url = mongoengine.URLField(required=True)
     created_at = mongoengine.DateTimeField(required=True)
     updated_at = mongoengine.DateTimeField(required=True)
+    fork = mongoengine.StringField(required=True)
     forks_count = mongoengine.IntField(required=True, default=0)
     stargazers_count = mongoengine.IntField(required=True, default=0)
     watchers_count = mongoengine.IntField(required=True, default=0)
@@ -123,7 +124,8 @@ class Repository(mongoengine.Document):
                 url=raw_data['url'],
                 created_at=raw_data['created_at'],
                 updated_at=raw_data['updated_at'],
-                forks_count=raw_data['forks_count'],
+                forks_count=raw_data['forks'],
+                fork=raw_data['fork'],
                 stargazers_count=raw_data['stargazers_count'],
                 watchers_count=raw_data['watchers_count'])
         else:
