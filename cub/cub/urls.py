@@ -16,15 +16,14 @@ v1_api.register(PRContributionResource())
 v1_api.register(RepositoryResource())
 v1_api.register(ScoreResource())
 
-
-urlpatterns = [
+urlpatterns = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^api/', include(v1_api.urls)),
     url(r'^authorize/', AuthorizeGitHubURL.as_view(), name='authorize'),
     url(r'^authenticate/', AuthenticateGitHubAccount.as_view(), name='authenticate'),
     url(r'^logout/', LogoutGitHubAccount.as_view(), name='logout'),
     url(r'^contribution/', Contributions.as_view(), name='contrib'),
-    url(r'^[\w]*', Home.as_view(), name='home'),
+    # Leave it last
+    url(r'^[\w]*', Home.as_view(), name='home')
 ]
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
