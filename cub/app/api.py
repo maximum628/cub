@@ -1,5 +1,6 @@
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization, DjangoAuthorization
+from tastypie.paginator import Paginator
 from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
@@ -26,6 +27,7 @@ class CommitContributionResource(resources.MongoEngineResource):
         allowed_methods = ['get']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
+        paginator_class = Paginator
 
 
 class PRContributionResource(resources.MongoEngineResource):
@@ -35,6 +37,7 @@ class PRContributionResource(resources.MongoEngineResource):
         allowed_methods = ['get']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
+        paginator_class = Paginator
 
 
 class RepositoryResource(resources.MongoEngineResource):
@@ -43,6 +46,7 @@ class RepositoryResource(resources.MongoEngineResource):
         allowed_methods = ['get']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
+        paginator_class = Paginator
 
 
 class ScoreResource(resources.MongoEngineResource):
@@ -52,3 +56,4 @@ class ScoreResource(resources.MongoEngineResource):
         excludes = ['live_score']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
+        paginator_class = Paginator
