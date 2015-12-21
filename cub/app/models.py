@@ -102,6 +102,7 @@ class Repository(mongoengine.Document):
 
     cub_account = mongoengine.StringField(required=True)
     name = mongoengine.StringField(required=True)
+    description = mongoengine.StringField(required=True)
     html_url = mongoengine.URLField(required=True, unique_with='cub_account')
     url = mongoengine.URLField(required=True)
     created_at = mongoengine.DateTimeField(required=True)
@@ -121,22 +122,25 @@ class Repository(mongoengine.Document):
 
             repo = repo.modify(
                 name=raw_data['name'],
+                description=raw_data['description'],
                 url=raw_data['url'],
                 created_at=raw_data['created_at'],
                 updated_at=raw_data['updated_at'],
                 forks_count=raw_data['forks'],
-                fork=raw_data['fork'],
+                fork=str(raw_data['fork']),
                 stargazers_count=raw_data['stargazers_count'],
                 watchers_count=raw_data['watchers_count'])
         else:
             repo = Repository(
                 cub_account=account,
                 name=raw_data['name'],
+                description=raw_data['description'],
                 html_url=raw_data['html_url'],
                 url=raw_data['url'],
                 created_at=raw_data['created_at'],
                 updated_at=raw_data['updated_at'],
-                forks_count=raw_data['forks_count'],
+                forks_count=raw_data['forks'],
+                fork=str(raw_data['fork']),
                 stargazers_count=raw_data['stargazers_count'],
                 watchers_count=raw_data['watchers_count']).save()
         return repo
