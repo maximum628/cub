@@ -181,11 +181,11 @@
 	      React.createElement("div", {id: "head"}, 
 	        React.createElement("div", {id: "head-box"}, 
 	          React.createElement("div", {id: "logo"}, 
-	            React.createElement("a", {href: "#"}, " CUB ")
+	            React.createElement(Link, {to: "/"}, "CUB")
 	          ), 
 	          React.createElement("nav", {id: "nav"}, 
 	            React.createElement("li", null, React.createElement(Link, {to: "/profile"}, "Profile")), 
-	            React.createElement("li", null, React.createElement(Link, {to: "/"}, "Repos")), 
+	            React.createElement("li", null, React.createElement(Link, {to: "/repos"}, "Repos")), 
 	            React.createElement("li", null, React.createElement(Link, {to: "/contact"}, "Contact"))
 	          )
 	        )
@@ -231,10 +231,29 @@
 	})
 
 
+	var IndexPage = React.createClass({displayName: "IndexPage",
+	  render: function() {
+	    return (
+	      React.createElement("div", null, 
+	        React.createElement(Nav, null), 
+	        React.createElement("div", {id: "intro"}, 
+	          React.createElement("div", {id: "intro-top"}, "Open Source Hub"), 
+	          React.createElement("div", {id: "intro-body"}, "CUB"), 
+	          React.createElement("div", {id: "intro-bottom"}, 
+	            React.createElement("a", {href: "/authorize", id: "intro-login"}, "Login")
+	          )
+	        )
+	      )
+	    )
+	  }
+	})
+
+
 	ReactDOM.render((
 	  React.createElement(Router, {history: history}, 
+	    React.createElement(Route, {path: "/", component: IndexPage}), 
 	    React.createElement(Route, {path: "/profile", component: ProfilePage}), 
-	    React.createElement(Route, {path: "/", component: RepoPage}), 
+	    React.createElement(Route, {path: "/repos", component: RepoPage}), 
 	    React.createElement(Route, {path: "/contact", component: ContactPage})
 	  )
 	), document.getElementById("main"))

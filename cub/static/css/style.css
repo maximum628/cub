@@ -1,7 +1,8 @@
 body {
   margin: 0px;
   font-weight: 300;
-  font-family: 'Roboto Slab', sans-serif;
+  font-family: 'Alegreya Sans', sans-serif;
+  color: rgba(255, 255, 255, 0.619608);
   background-color: #2d661b;
 }
 
@@ -77,8 +78,38 @@ h1 {
   text-align: center;
 }
 
+/* INDEX */
+#intro {
+  width: 300px;
+  margin: 30% auto 0px auto;
+  text-align: center;
+}
 
-### PROFILE ###
+#intro-body {
+  font-size: 64px;
+  font-weight: 300;
+  color: white;
+}
+
+#intro-bottom {
+  margin: 10px 0px 0px 0px;
+}
+
+#intro-bottom a{
+  color: #f7c72a;
+  font-size: 13px;
+  padding: 5px 15px 5px 15px;
+  border: solid #f7c72a 2px;
+  text-decoration: none;
+}
+
+#intro-bottom a:hover{
+  color: #ffffff;
+  border: solid #ffffff 2px;
+  text-decoration: none;
+}
+
+/* PROFILE */
 #profile {
   width: 1000px;
   margin: 0px auto 0px auto;

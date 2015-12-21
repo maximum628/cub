@@ -135,11 +135,11 @@ var Nav = React.createClass({
       <div id="head">
         <div id="head-box">
           <div id="logo">
-            <a href="#"> CUB </a>
+            <Link to='/'>CUB</Link>
           </div>
           <nav id="nav">
             <li><Link to='/profile'>Profile</Link></li>
-            <li><Link to='/'>Repos</Link></li>
+            <li><Link to='/repos'>Repos</Link></li>
             <li><Link to='/contact'>Contact</Link></li>
           </nav>
         </div>
@@ -185,10 +185,29 @@ var ProfilePage = React.createClass({
 })
 
 
+var IndexPage = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <Nav />
+        <div id="intro">
+          <div id="intro-top">Open Source Hub</div>
+          <div id="intro-body">CUB</div>
+          <div id="intro-bottom">
+            <a href="/authorize" id="intro-login">Login</a>
+          </div>
+        </div>
+      </div>
+    )
+  }
+})
+
+
 ReactDOM.render((
   <Router history={history}>
+    <Route path="/" component={IndexPage} />
     <Route path="/profile" component={ProfilePage} />
-    <Route path="/" component={RepoPage} />
+    <Route path="/repos" component={RepoPage} />
     <Route path="/contact" component={ContactPage} />
   </Router>
 ), document.getElementById("main"))

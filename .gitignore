@@ -2,6 +2,8 @@
 *.sqlite3
 .vagrant
 
+Makefile
 *.DS_Store
 
 node_modules
+cub/static/admin
