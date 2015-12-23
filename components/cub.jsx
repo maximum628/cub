@@ -194,7 +194,7 @@ var IndexPage = React.createClass({
           <div id="intro-top">Open Source Hub</div>
           <div id="intro-body">CUB</div>
           <div id="intro-bottom">
-            <a href="/authorize" id="intro-login">Login</a>
+            <a href="/authorize/" id="intro-login">Login</a>
           </div>
         </div>
       </div>
