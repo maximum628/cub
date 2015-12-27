@@ -240,7 +240,7 @@
 	          React.createElement("div", {id: "intro-top"}, "Open Source Hub"), 
 	          React.createElement("div", {id: "intro-body"}, "CUB"), 
 	          React.createElement("div", {id: "intro-bottom"}, 
-	            React.createElement("a", {href: "/authorize", id: "intro-login"}, "Login")
+	            React.createElement("a", {href: "/authorize/", id: "intro-login"}, "Login")
 	          )
 	        )
 	      )
