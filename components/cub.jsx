@@ -138,13 +138,22 @@ var Nav = React.createClass({
             <Link to='/'>CUB</Link>
           </div>
           <nav id="nav">
-            <li><Link to='/profile'>Profile</Link></li>
-            <li><Link to='/repos'>Repos</Link></li>
-            <li><Link to='/contact'>Contact</Link></li>
+            <li><Link to='/profile/'>Profile</Link></li>
+            <li><Link to='/repos/'>Repos</Link></li>
+            <li><Link to='/contact/'>Contact</Link></li>
+            { this.render_links() }
           </nav>
         </div>
       </div>
     )
+  },
+
+  render_links: function() {
+    if (typeof user !== 'undefined') {
+      return (<li><a href="/logout/" id="intro-login">Logout</a></li>)
+    } else {
+      return (<li><a href="/authorize/" id="intro-login">Login</a></li>)
+    }
   }
 })
 
@@ -194,11 +203,18 @@ var IndexPage = React.createClass({
           <div id="intro-top">Open Source Hub</div>
           <div id="intro-body">CUB</div>
           <div id="intro-bottom">
-            <a href="/authorize/" id="intro-login">Login</a>
+            { this.render_links() }
           </div>
         </div>
       </div>
     )
+  },
+
+  render_links: function() {
+    if (typeof user !== 'undefined')
+      return (<a href="/profile/" id="intro-login">Profile</a>)
+    else
+      return (<a href="/authorize/" id="intro-login">Login</a>)
   }
 })
 
@@ -206,8 +222,8 @@ var IndexPage = React.createClass({
 ReactDOM.render((
   <Router history={history}>
     <Route path="/" component={IndexPage} />
-    <Route path="/profile" component={ProfilePage} />
-    <Route path="/repos" component={RepoPage} />
-    <Route path="/contact" component={ContactPage} />
+    <Route path="/profile/" component={ProfilePage} />
+    <Route path="/repos/" component={RepoPage} />
+    <Route path="/contact/" component={ContactPage} />
   </Router>
 ), document.getElementById("main"))

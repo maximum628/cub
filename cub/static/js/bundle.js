@@ -184,13 +184,22 @@
 	            React.createElement(Link, {to: "/"}, "CUB")
 	          ), 
 	          React.createElement("nav", {id: "nav"}, 
-	            React.createElement("li", null, React.createElement(Link, {to: "/profile"}, "Profile")), 
-	            React.createElement("li", null, React.createElement(Link, {to: "/repos"}, "Repos")), 
-	            React.createElement("li", null, React.createElement(Link, {to: "/contact"}, "Contact"))
+	            React.createElement("li", null, React.createElement(Link, {to: "/profile/"}, "Profile")), 
+	            React.createElement("li", null, React.createElement(Link, {to: "/repos/"}, "Repos")), 
+	            React.createElement("li", null, React.createElement(Link, {to: "/contact/"}, "Contact")), 
+	             this.render_links() 
 	          )
 	        )
 	      )
 	    )
+	  },
+
+	  render_links: function() {
+	    if (typeof user !== 'undefined') {
+	      return (React.createElement("li", null, React.createElement("a", {href: "/logout/", id: "intro-login"}, "Logout")))
+	    } else {
+	      return (React.createElement("li", null, React.createElement("a", {href: "/authorize/", id: "intro-login"}, "Login")))
+	    }
 	  }
 	})
 
@@ -240,11 +249,18 @@
 	          React.createElement("div", {id: "intro-top"}, "Open Source Hub"), 
 	          React.createElement("div", {id: "intro-body"}, "CUB"), 
 	          React.createElement("div", {id: "intro-bottom"}, 
-	            React.createElement("a", {href: "/authorize/", id: "intro-login"}, "Login")
+	             this.render_links() 
 	          )
 	        )
 	      )
 	    )
+	  },
+
+	  render_links: function() {
+	    if (typeof user !== 'undefined')
+	      return (React.createElement("a", {href: "/profile/", id: "intro-login"}, "Profile"))
+	    else
+	      return (React.createElement("a", {href: "/authorize/", id: "intro-login"}, "Login"))
 	  }
 	})
 
@@ -252,9 +268,9 @@
 	ReactDOM.render((
 	  React.createElement(Router, {history: history}, 
 	    React.createElement(Route, {path: "/", component: IndexPage}), 
-	    React.createElement(Route, {path: "/profile", component: ProfilePage}), 
-	    React.createElement(Route, {path: "/repos", component: RepoPage}), 
-	    React.createElement(Route, {path: "/contact", component: ContactPage})
+	    React.createElement(Route, {path: "/profile/", component: ProfilePage}), 
+	    React.createElement(Route, {path: "/repos/", component: RepoPage}), 
+	    React.createElement(Route, {path: "/contact/", component: ContactPage})
 	  )
 	), document.getElementById("main"))
 
@@ -309,7 +325,6 @@
 	});
 
 	React.__SECRET_DOM_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOM;
-	React.__SECRET_DOM_SERVER_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactDOMServer;
 
 	module.exports = React;
 
@@ -10660,7 +10675,6 @@
 	    multiple: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
 	    muted: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
 	    name: null,
-	    nonce: MUST_USE_ATTRIBUTE,
 	    noValidate: HAS_BOOLEAN_VALUE,
 	    open: HAS_BOOLEAN_VALUE,
 	    optimum: null,
@@ -10672,7 +10686,6 @@
 	    readOnly: MUST_USE_PROPERTY | HAS_BOOLEAN_VALUE,
 	    rel: null,
 	    required: HAS_BOOLEAN_VALUE,
-	    reversed: HAS_BOOLEAN_VALUE,
 	    role: MUST_USE_ATTRIBUTE,
 	    rows: MUST_USE_ATTRIBUTE | HAS_POSITIVE_NUMERIC_VALUE,
 	    rowSpan: null,
@@ -18875,7 +18888,7 @@
 
 	'use strict';
 
-	module.exports = '0.14.3';
+	module.exports = '0.14.2';
 
 /***/ },
 /* 147 */
