@@ -89,7 +89,7 @@
 	  },
 
 	  componentDidMount: function() {
-	    $.get('/api/v1/repository/?offset=0&limit=100&format=json', function(res) {
+	    $.get('/api/v1/repository/?offset=0&limit=10', function(res) {
 	      if (this.isMounted()) {
 	        this.setState({
 	          repos: res.objects
@@ -101,12 +101,12 @@
 	  render: function() {
 	    return (
 	      React.createElement("div", null, 
+	        React.createElement("h1", null, "Your score"), 
+	        React.createElement(PointsList, null), 
 	        React.createElement("h1", null, "Your contributions"), 
 	         this.state.repos.map(function(repo, i) {
 	          return (React.createElement(Repo, {repo: repo, key: i}))
-	        }, this), 
-
-	        React.createElement(PointsList, null)
+	        }, this)
 	      )
 	    );
 	  }

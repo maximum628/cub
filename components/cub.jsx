@@ -43,7 +43,7 @@ var RepoList = React.createClass({
   },
 
   componentDidMount: function() {
-    $.get('/api/v1/repository/?offset=0&limit=100&format=json', function(res) {
+    $.get('/api/v1/repository/?offset=0&limit=10', function(res) {
       if (this.isMounted()) {
         this.setState({
           repos: res.objects
@@ -55,12 +55,12 @@ var RepoList = React.createClass({
   render: function() {
     return (
       <div>
+        <h1>Your score</h1>
+        <PointsList />
         <h1>Your contributions</h1>
         { this.state.repos.map(function(repo, i) {
           return (<Repo repo={repo} key={i} />)
         }, this)}
-
-        <PointsList />
       </div>
     );
   }
