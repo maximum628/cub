@@ -137,7 +137,7 @@
 	                       pageRangeDisplayed: 5, 
 	                       clickCallback: this.handleClick, 
 	                       containerClassName: "pagination", 
-	                       subContainerClassName: "pages pagination", 
+	                       subContainerClassName: "pagination-pages", 
 	                       activeClassName: "active"})
 	      )
 	    );
@@ -171,7 +171,8 @@
 	        avatar_url : null,
 	        name       : null,
 	        username   : null,
-	        email      : null
+	        email      : null,
+	        progress   : 70,
 	      }
 	  },
 
@@ -200,6 +201,17 @@
 	            React.createElement("a", {href: 'http://github.com/' + this.state.username}, this.state.username)
 	          ), 
 	          React.createElement("div", {id: "email"}, this.state.email)
+	        ), 
+
+	        React.createElement("div", {className: "profile-progress"}, 
+	          React.createElement("span", {className: "progress-level", style: {width: '10%'}}, "Noob"), 
+	          React.createElement("div", {id: "progress-bar"}, 
+	            React.createElement("div", {className: "progress-bar progress-bar-success", role: "progressbar", "aria-valuenow": "70", 
+	            "aria-valuemin": "0", "aria-valuemax": "100", style: {width: this.state.progress + '%', float: 'None'}}, 
+	              "70%"
+	            )
+	          ), 
+	          React.createElement("span", {className: "progress-level", style: {width: '100%'}}, "Rockstar")
 	        )
 	      )
 	    )
@@ -216,13 +228,22 @@
 	            React.createElement(Link, {to: "/"}, "CUB")
 	          ), 
 	          React.createElement("nav", {id: "nav"}, 
-	            React.createElement("li", null, React.createElement(Link, {to: "/profile"}, "Profile")), 
-	            React.createElement("li", null, React.createElement(Link, {to: "/repos"}, "Repos")), 
-	            React.createElement("li", null, React.createElement(Link, {to: "/contact"}, "Contact"))
+	            React.createElement("li", null, React.createElement(Link, {to: "/profile/"}, "Profile")), 
+	            React.createElement("li", null, React.createElement(Link, {to: "/repos/"}, "Repos")), 
+	            React.createElement("li", null, React.createElement(Link, {to: "/contact/"}, "Contact")), 
+	             this.render_links() 
 	          )
 	        )
 	      )
 	    )
+	  },
+
+	  render_links: function() {
+	    if (typeof user !== 'undefined') {
+	      return (React.createElement("li", null, React.createElement("a", {href: "/logout/", id: "intro-login"}, "Logout")))
+	    } else {
+	      return (React.createElement("li", null, React.createElement("a", {href: "/authorize/", id: "intro-login"}, "Login")))
+	    }
 	  }
 	})
 
@@ -272,11 +293,18 @@
 	          React.createElement("div", {id: "intro-top"}, "Open Source Hub"), 
 	          React.createElement("div", {id: "intro-body"}, "CUB"), 
 	          React.createElement("div", {id: "intro-bottom"}, 
-	            React.createElement("a", {href: "/authorize/", id: "intro-login"}, "Login")
+	             this.render_links() 
 	          )
 	        )
 	      )
 	    )
+	  },
+
+	  render_links: function() {
+	    if (typeof user !== 'undefined')
+	      return (React.createElement("a", {href: "/profile/", id: "intro-login"}, "Profile"))
+	    else
+	      return (React.createElement("a", {href: "/authorize/", id: "intro-login"}, "Login"))
 	  }
 	})
 
@@ -284,9 +312,9 @@
 	ReactDOM.render((
 	  React.createElement(Router, {history: history}, 
 	    React.createElement(Route, {path: "/", component: IndexPage}), 
-	    React.createElement(Route, {path: "/profile", component: ProfilePage}), 
-	    React.createElement(Route, {path: "/repos", component: RepoPage}), 
-	    React.createElement(Route, {path: "/contact", component: ContactPage})
+	    React.createElement(Route, {path: "/profile/", component: ProfilePage}), 
+	    React.createElement(Route, {path: "/repos/", component: RepoPage}), 
+	    React.createElement(Route, {path: "/contact/", component: ContactPage})
 	  )
 	), document.getElementById("main"))
 

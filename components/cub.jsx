@@ -91,7 +91,7 @@ var RepoList = React.createClass({
                        pageRangeDisplayed={5}
                        clickCallback={this.handleClick}
                        containerClassName={"pagination"}
-                       subContainerClassName={"pages pagination"}
+                       subContainerClassName={"pagination-pages"}
                        activeClassName={"active"} />
       </div>
     );
@@ -125,7 +125,8 @@ var Profile = React.createClass({
         avatar_url : null,
         name       : null,
         username   : null,
-        email      : null
+        email      : null,
+        progress   : 70,
       }
   },
 
@@ -155,6 +156,17 @@ var Profile = React.createClass({
           </div>
           <div id='email'>{this.state.email}</div>
         </div>
+
+        <div className="profile-progress">
+          <span className="progress-level" style={{width: '10%'}}>Noob</span>
+          <div id="progress-bar">
+            <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+            aria-valuemin="0" aria-valuemax="100" style={{width: this.state.progress + '%', float: 'None'}}>
+              70%
+            </div>
+          </div>
+          <span className="progress-level" style={{width: '100%'}}>Rockstar</span>
+        </div>
       </div>
     )
   }
@@ -170,13 +182,22 @@ var Nav = React.createClass({
             <Link to='/'>CUB</Link>
           </div>
           <nav id="nav">
-            <li><Link to='/profile'>Profile</Link></li>
-            <li><Link to='/repos'>Repos</Link></li>
-            <li><Link to='/contact'>Contact</Link></li>
+            <li><Link to='/profile/'>Profile</Link></li>
+            <li><Link to='/repos/'>Repos</Link></li>
+            <li><Link to='/contact/'>Contact</Link></li>
+            { this.render_links() }
           </nav>
         </div>
       </div>
     )
+  },
+
+  render_links: function() {
+    if (typeof user !== 'undefined') {
+      return (<li><a href="/logout/" id="intro-login">Logout</a></li>)
+    } else {
+      return (<li><a href="/authorize/" id="intro-login">Login</a></li>)
+    }
   }
 })
 
@@ -226,11 +247,18 @@ var IndexPage = React.createClass({
           <div id="intro-top">Open Source Hub</div>
           <div id="intro-body">CUB</div>
           <div id="intro-bottom">
-            <a href="/authorize/" id="intro-login">Login</a>
+            { this.render_links() }
           </div>
         </div>
       </div>
     )
+  },
+
+  render_links: function() {
+    if (typeof user !== 'undefined')
+      return (<a href="/profile/" id="intro-login">Profile</a>)
+    else
+      return (<a href="/authorize/" id="intro-login">Login</a>)
   }
 })
 
@@ -238,8 +266,8 @@ var IndexPage = React.createClass({
 ReactDOM.render((
   <Router history={history}>
     <Route path="/" component={IndexPage} />
-    <Route path="/profile" component={ProfilePage} />
-    <Route path="/repos" component={RepoPage} />
-    <Route path="/contact" component={ContactPage} />
+    <Route path="/profile/" component={ProfilePage} />
+    <Route path="/repos/" component={RepoPage} />
+    <Route path="/contact/" component={ContactPage} />
   </Router>
 ), document.getElementById("main"))

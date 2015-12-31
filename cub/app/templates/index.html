@@ -4,9 +4,16 @@
 
   <head>
     <title>CUB App</title>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link href='https://fonts.googleapis.com/css?family=Alegreya+Sans' rel='stylesheet' type='text/css'>
     <script type="text/javascript", src="https://cdnjs.cloudflare.com/ajax/libs/foundation/5.5.1/js/vendor/jquery.js"></script>
+    {% if user.is_authenticated %}
+      <script type="text/javascript"> var user = true </script>
+    {% endif %}
   </head>
 
   <body>
