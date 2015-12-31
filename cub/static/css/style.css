@@ -141,3 +141,30 @@ h1 {
   -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
   box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
 }
+
+/* Repos Paginate */
+.pagination ul {
+  display: inline-block;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.pagination li {
+  display: inline-block;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.pages.pagination li {
+  border-style: solid;
+  border-width: thin;
+  margin-right: 10px;
+}
+
+.pages.pagination li.active {
+  background-color: white;
+}
+
+.pages.pagination li.active a {
+  color: blue;
+}
