@@ -51,8 +51,10 @@
 	var Router = __webpack_require__(189).Router;
 	var Route = __webpack_require__(189).Route;
 	var Link = __webpack_require__(189).Link;
+	var ReactPaginate = __webpack_require__(215);
 
 	const history = History.createHistory();
+	const per_page = 10;
 
 	var Repo = React.createClass({displayName: "Repo",
 	  render: function() {
@@ -84,18 +86,37 @@
 	var RepoList = React.createClass({displayName: "RepoList",
 	  getInitialState: function() {
 	      return {
-	        repos: []
+	        repos: [],
+	        offset: 0,
+	        pageNum: 1
 	      }
 	  },
 
-	  componentDidMount: function() {
-	    $.get('/api/v1/repository/?offset=0&limit=10', function(res) {
-	      if (this.isMounted()) {
-	        this.setState({
-	          repos: res.objects
-	        });
-	      }
+	  getRepoList: function() {
+	    var offset = this.state.offset;
+	    var nextOffset = offset + per_page;
+	    var url = '/api/v1/repository/?offset=' + offset + '&limit=' + per_page;
+
+	    $.get(url, function(res) {
+	      this.setState({
+	        repos: res.objects,
+	        offset: nextOffset,
+	        pageNum: res.meta.total_count / per_page
+	      });
 	    }.bind(this));
+	  },
+
+	  componentDidMount: function() {
+	    if (this.isMounted()) {
+	      this.getRepoList();
+	    }
+	  },
+
+	  handleClick: function(event) {
+	    this.setState({
+	      offset: this.state.offset + per_page
+	    });
+	    this.getRepoList();
 	  },
 
 	  render: function() {
@@ -106,7 +127,18 @@
 	        React.createElement("h1", null, "Your contributions"), 
 	         this.state.repos.map(function(repo, i) {
 	          return (React.createElement(Repo, {repo: repo, key: i}))
-	        }, this)
+	        }, this), 
+
+	        React.createElement(ReactPaginate, {previousLabel: "previous", 
+	                       nextLabel: "next", 
+	                       breakLabel: React.createElement("li", {className: "break"}, React.createElement("a", {href: ""}, "...")), 
+	                       pageNum: this.state.pageNum, 
+	                       marginPagesDisplayed: 2, 
+	                       pageRangeDisplayed: 5, 
+	                       clickCallback: this.handleClick, 
+	                       containerClassName: "pagination", 
+	                       subContainerClassName: "pages pagination", 
+	                       activeClassName: "active"})
 	      )
 	    );
 	  }
@@ -25020,6 +25052,521 @@
 	exports['default'] = match;
 	module.exports = exports['default'];
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 215 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _PaginationBoxView = __webpack_require__(216);
+
+	var _PaginationBoxView2 = _interopRequireDefault(_PaginationBoxView);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	module.exports = _PaginationBoxView2.default;
+	//# sourceMappingURL=index.js.map
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classnames = __webpack_require__(217);
+
+	var _classnames2 = _interopRequireDefault(_classnames);
+
+	var _PaginationListView = __webpack_require__(218);
+
+	var _PaginationListView2 = _interopRequireDefault(_PaginationListView);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PaginationBoxView = (function (_Component) {
+	  _inherits(PaginationBoxView, _Component);
+
+	  function PaginationBoxView(props) {
+	    _classCallCheck(this, PaginationBoxView);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PaginationBoxView).call(this, props));
+
+	    _this.handlePreviousPage = function (evt) {
+	      evt.preventDefault ? evt.preventDefault() : evt.returnValue = false;
+	      if (_this.state.selected > 0) {
+	        _this.handlePageSelected(_this.state.selected - 1, evt);
+	      }
+	    };
+
+	    _this.handleNextPage = function (evt) {
+	      evt.preventDefault ? evt.preventDefault() : evt.returnValue = false;
+	      if (_this.state.selected < _this.props.pageNum - 1) {
+	        _this.handlePageSelected(_this.state.selected + 1, evt);
+	      }
+	    };
+
+	    _this.handlePageSelected = function (selected, evt) {
+	      evt.preventDefault ? evt.preventDefault() : evt.returnValue = false;
+
+	      if (_this.state.selected === selected) return;
+
+	      _this.setState({ selected: selected });
+
+	      // Call the callback with the new selected item:
+	      _this.callCallback(selected);
+	    };
+
+	    _this.callCallback = function (selectedItem) {
+	      if (typeof _this.props.clickCallback !== "undefined" && typeof _this.props.clickCallback === "function") {
+	        _this.props.clickCallback({ selected: selectedItem });
+	      }
+	    };
+
+	    _this.state = {
+	      selected: props.initialSelected ? props.initialSelected : 0
+	    };
+	    return _this;
+	  }
+
+	  _createClass(PaginationBoxView, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      // Call the callback with the initialSelected item:
+	      if (typeof this.props.initialSelected !== 'undefined') {
+	        this.callCallback(this.props.initialSelected);
+	      }
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var disabled = this.props.disabledClassName;
+
+	      var previousClasses = (0, _classnames2.default)(this.props.previousClassName, { disabled: this.state.selected === 0 });
+
+	      var nextClasses = (0, _classnames2.default)(this.props.nextClassName, { disabled: this.state.selected === this.props.pageNum - 1 });
+
+	      return _react2.default.createElement(
+	        'ul',
+	        { className: this.props.containerClassName },
+	        _react2.default.createElement(
+	          'li',
+	          { onClick: this.handlePreviousPage, className: previousClasses },
+	          _react2.default.createElement(
+	            'a',
+	            { href: '', className: this.props.previousLinkClassName },
+	            this.props.previousLabel
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(_PaginationListView2.default, {
+	            onPageSelected: this.handlePageSelected,
+	            selected: this.state.selected,
+	            pageNum: this.props.pageNum,
+	            pageRangeDisplayed: this.props.pageRangeDisplayed,
+	            marginPagesDisplayed: this.props.marginPagesDisplayed,
+	            breakLabel: this.props.breakLabel,
+	            subContainerClassName: this.props.subContainerClassName,
+	            pageClassName: this.props.pageClassName,
+	            pageLinkClassName: this.props.pageLinkClassName,
+	            activeClassName: this.props.activeClassName,
+	            disabledClassName: this.props.disabledClassName })
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          { onClick: this.handleNextPage, className: nextClasses },
+	          _react2.default.createElement(
+	            'a',
+	            { href: '', className: this.props.nextLinkClassName },
+	            this.props.nextLabel
+	          )
+	        )
+	      );
+	    }
+	  }, {
+	    key: 'componentWillReceiveProps',
+	    value: function componentWillReceiveProps(nextProps) {
+	      if (typeof nextProps.forceSelected !== 'undefined' && nextProps.forceSelected !== this.state.selected) {
+	        this.setState({ selected: nextProps.forceSelected });
+	      }
+	    }
+	  }]);
+
+	  return PaginationBoxView;
+	})(_react.Component);
+
+	PaginationBoxView.propTypes = {
+	  pageNum: _react.PropTypes.number.isRequired,
+	  pageRangeDisplayed: _react.PropTypes.number.isRequired,
+	  marginPagesDisplayed: _react.PropTypes.number.isRequired,
+	  previousLabel: _react.PropTypes.node,
+	  nextLabel: _react.PropTypes.node,
+	  breakLabel: _react.PropTypes.node,
+	  clickCallback: _react.PropTypes.func,
+	  initialSelected: _react.PropTypes.number,
+	  forceSelected: _react.PropTypes.number,
+	  containerClassName: _react.PropTypes.string,
+	  subContainerClassName: _react.PropTypes.string,
+	  pageClassName: _react.PropTypes.string,
+	  pageLinkClassName: _react.PropTypes.string,
+	  activeClassName: _react.PropTypes.string,
+	  previousClassName: _react.PropTypes.string,
+	  nextClassName: _react.PropTypes.string,
+	  previousLinkClassName: _react.PropTypes.string,
+	  nextLinkClassName: _react.PropTypes.string,
+	  disabledClassName: _react.PropTypes.string
+	};
+	PaginationBoxView.defaultProps = {
+	  pageNum: 10,
+	  pageRangeDisplayed: 2,
+	  marginPagesDisplayed: 3,
+	  activeClassName: "selected",
+	  previousClassName: "previous",
+	  nextClassName: "next",
+	  previousLabel: "Previous",
+	  nextLabel: "Next",
+	  breakLabel: "...",
+	  disabledClassName: "disabled"
+	};
+	exports.default = PaginationBoxView;
+	;
+	//# sourceMappingURL=PaginationBoxView.js.map
+
+/***/ },
+/* 217 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	  Copyright (c) 2015 Jed Watson.
+	  Licensed under the MIT License (MIT), see
+	  http://jedwatson.github.io/classnames
+	*/
+
+	function classNames() {
+		var classes = '';
+		var arg;
+
+		for (var i = 0; i < arguments.length; i++) {
+			arg = arguments[i];
+			if (!arg) {
+				continue;
+			}
+
+			if ('string' === typeof arg || 'number' === typeof arg) {
+				classes += ' ' + arg;
+			} else if (Object.prototype.toString.call(arg) === '[object Array]') {
+				classes += ' ' + classNames.apply(null, arg);
+			} else if ('object' === typeof arg) {
+				for (var key in arg) {
+					if (!arg.hasOwnProperty(key) || !arg[key]) {
+						continue;
+					}
+					classes += ' ' + key;
+				}
+			}
+		}
+		return classes.substr(1);
+	}
+
+	// safely export classNames for node / browserify
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	}
+
+	// safely export classNames for RequireJS
+	if (true) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function() {
+			return classNames;
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	}
+
+
+/***/ },
+/* 218 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactAddonsCreateFragment = __webpack_require__(219);
+
+	var _reactAddonsCreateFragment2 = _interopRequireDefault(_reactAddonsCreateFragment);
+
+	var _PageView = __webpack_require__(221);
+
+	var _PageView2 = _interopRequireDefault(_PageView);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PaginationListView = (function (_Component) {
+	  _inherits(PaginationListView, _Component);
+
+	  function PaginationListView() {
+	    _classCallCheck(this, PaginationListView);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(PaginationListView).apply(this, arguments));
+	  }
+
+	  _createClass(PaginationListView, [{
+	    key: 'render',
+	    value: function render() {
+	      var items = {};
+
+	      if (this.props.pageNum <= this.props.pageRangeDisplayed) {
+
+	        for (var index = 0; index < this.props.pageNum; index++) {
+	          items['key' + index] = _react2.default.createElement(_PageView2.default, {
+	            onClick: this.props.onPageSelected.bind(null, index),
+	            selected: this.props.selected === index,
+	            pageClassName: this.props.pageClassName,
+	            pageLinkClassName: this.props.pageLinkClassName,
+	            activeClassName: this.props.activeClassName,
+	            page: index + 1 });
+	        }
+	      } else {
+
+	        var leftSide = this.props.pageRangeDisplayed / 2;
+	        var rightSide = this.props.pageRangeDisplayed - leftSide;
+
+	        if (this.props.selected > this.props.pageNum - this.props.pageRangeDisplayed / 2) {
+	          rightSide = this.props.pageNum - this.props.selected;
+	          leftSide = this.props.pageRangeDisplayed - rightSide;
+	        } else if (this.props.selected < this.props.pageRangeDisplayed / 2) {
+	          leftSide = this.props.selected;
+	          rightSide = this.props.pageRangeDisplayed - leftSide;
+	        }
+
+	        var index = undefined;
+	        var page = undefined;
+
+	        for (index = 0; index < this.props.pageNum; index++) {
+
+	          page = index + 1;
+
+	          var pageView = _react2.default.createElement(_PageView2.default, {
+	            onClick: this.props.onPageSelected.bind(null, index),
+	            selected: this.props.selected === index,
+	            pageClassName: this.props.pageClassName,
+	            pageLinkClassName: this.props.pageLinkClassName,
+	            activeClassName: this.props.activeClassName,
+	            page: index + 1 });
+
+	          if (page <= this.props.marginPagesDisplayed) {
+	            items['key' + index] = pageView;
+	            continue;
+	          }
+
+	          if (page > this.props.pageNum - this.props.marginPagesDisplayed) {
+	            items['key' + index] = pageView;
+	            continue;
+	          }
+
+	          if (index >= this.props.selected - leftSide && index <= this.props.selected + rightSide) {
+	            items['key' + index] = pageView;
+	            continue;
+	          }
+
+	          var keys = Object.keys(items);
+	          var breakLabelKey = keys[keys.length - 1];
+	          var breakLabelValue = items[breakLabelKey];
+
+	          if (breakLabelValue !== this.props.breakLabel) {
+	            items['key' + index] = this.props.breakLabel;
+	          }
+	        }
+	      }
+
+	      return _react2.default.createElement(
+	        'ul',
+	        { className: this.props.subContainerClassName },
+	        (0, _reactAddonsCreateFragment2.default)(items)
+	      );
+	    }
+	  }]);
+
+	  return PaginationListView;
+	})(_react.Component);
+
+	exports.default = PaginationListView;
+	;
+	//# sourceMappingURL=PaginationListView.js.map
+
+/***/ },
+/* 219 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(220).create;
+
+/***/ },
+/* 220 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {/**
+	 * Copyright 2015, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * LICENSE file in the root directory of this source tree. An additional grant
+	 * of patent rights can be found in the PATENTS file in the same directory.
+	 *
+	 * @providesModule ReactFragment
+	 */
+
+	'use strict';
+
+	var ReactChildren = __webpack_require__(110);
+	var ReactElement = __webpack_require__(42);
+
+	var emptyFunction = __webpack_require__(15);
+	var invariant = __webpack_require__(13);
+	var warning = __webpack_require__(25);
+
+	/**
+	 * We used to allow keyed objects to serve as a collection of ReactElements,
+	 * or nested sets. This allowed us a way to explicitly key a set a fragment of
+	 * components. This is now being replaced with an opaque data structure.
+	 * The upgrade path is to call React.addons.createFragment({ key: value }) to
+	 * create a keyed fragment. The resulting data structure is an array.
+	 */
+
+	var numericPropertyRegex = /^\d+$/;
+
+	var warnedAboutNumeric = false;
+
+	var ReactFragment = {
+	  // Wrap a keyed object in an opaque proxy that warns you if you access any
+	  // of its properties.
+	  create: function (object) {
+	    if (typeof object !== 'object' || !object || Array.isArray(object)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'React.addons.createFragment only accepts a single object. Got: %s', object) : undefined;
+	      return object;
+	    }
+	    if (ReactElement.isValidElement(object)) {
+	      process.env.NODE_ENV !== 'production' ? warning(false, 'React.addons.createFragment does not accept a ReactElement ' + 'without a wrapper object.') : undefined;
+	      return object;
+	    }
+
+	    !(object.nodeType !== 1) ? process.env.NODE_ENV !== 'production' ? invariant(false, 'React.addons.createFragment(...): Encountered an invalid child; DOM ' + 'elements are not valid children of React components.') : invariant(false) : undefined;
+
+	    var result = [];
+
+	    for (var key in object) {
+	      if (process.env.NODE_ENV !== 'production') {
+	        if (!warnedAboutNumeric && numericPropertyRegex.test(key)) {
+	          process.env.NODE_ENV !== 'production' ? warning(false, 'React.addons.createFragment(...): Child objects should have ' + 'non-numeric keys so ordering is preserved.') : undefined;
+	          warnedAboutNumeric = true;
+	        }
+	      }
+	      ReactChildren.mapIntoWithKeyPrefixInternal(object[key], result, key, emptyFunction.thatReturnsArgument);
+	    }
+
+	    return result;
+	  }
+	};
+
+	module.exports = ReactFragment;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
+
+/***/ },
+/* 221 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var PageView = (function (_React$Component) {
+	  _inherits(PageView, _React$Component);
+
+	  function PageView() {
+	    _classCallCheck(this, PageView);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(PageView).apply(this, arguments));
+	  }
+
+	  _createClass(PageView, [{
+	    key: 'render',
+	    value: function render() {
+	      var linkClassName = this.props.pageLinkClassName;
+	      var cssClassName = this.props.pageClassName;
+
+	      if (this.props.selected) {
+	        if (typeof cssClassName !== 'undefined') {
+	          cssClassName = cssClassName + ' ' + this.props.activeClassName;
+	        } else {
+	          cssClassName = this.props.activeClassName;
+	        }
+	      }
+
+	      return _react2.default.createElement(
+	        'li',
+	        { className: cssClassName },
+	        _react2.default.createElement(
+	          'a',
+	          _extends({}, this.props, { href: '', className: linkClassName }),
+	          this.props.page
+	        )
+	      );
+	    }
+	  }]);
+
+	  return PageView;
+	})(_react2.default.Component);
+
+	exports.default = PageView;
+	;
+	//# sourceMappingURL=PageView.js.map
 
 /***/ }
 /******/ ]);

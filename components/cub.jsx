@@ -5,8 +5,10 @@ var History = require('history');
 var Router = require('react-router').Router;
 var Route = require('react-router').Route;
 var Link = require('react-router').Link;
+var ReactPaginate = require('react-paginate');
 
 const history = History.createHistory();
+const per_page = 10;
 
 var Repo = React.createClass({
   render: function() {
@@ -38,18 +40,37 @@ var Repo = React.createClass({
 var RepoList = React.createClass({
   getInitialState: function() {
       return {
-        repos: []
+        repos: [],
+        offset: 0,
+        pageNum: 1
       }
   },
 
-  componentDidMount: function() {
-    $.get('/api/v1/repository/?offset=0&limit=10', function(res) {
-      if (this.isMounted()) {
-        this.setState({
-          repos: res.objects
-        });
-      }
+  getRepoList: function() {
+    var offset = this.state.offset;
+    var nextOffset = offset + per_page;
+    var url = '/api/v1/repository/?offset=' + offset + '&limit=' + per_page;
+
+    $.get(url, function(res) {
+      this.setState({
+        repos: res.objects,
+        offset: nextOffset,
+        pageNum: res.meta.total_count / per_page
+      });
     }.bind(this));
+  },
+
+  componentDidMount: function() {
+    if (this.isMounted()) {
+      this.getRepoList();
+    }
+  },
+
+  handleClick: function(event) {
+    this.setState({
+      offset: this.state.offset + per_page
+    });
+    this.getRepoList();
   },
 
   render: function() {
@@ -61,6 +82,17 @@ var RepoList = React.createClass({
         { this.state.repos.map(function(repo, i) {
           return (<Repo repo={repo} key={i} />)
         }, this)}
+
+        <ReactPaginate previousLabel={"previous"}
+                       nextLabel={"next"}
+                       breakLabel={<li className="break"><a href="">...</a></li>}
+                       pageNum={this.state.pageNum}
+                       marginPagesDisplayed={2}
+                       pageRangeDisplayed={5}
+                       clickCallback={this.handleClick}
+                       containerClassName={"pagination"}
+                       subContainerClassName={"pages pagination"}
+                       activeClassName={"active"} />
       </div>
     );
   }
