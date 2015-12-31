@@ -118,6 +118,7 @@ h1 {
 
 #profile-info {
   padding-top: 25px;
+  min-height: 170px;
 }
 
 #profile-name {
@@ -140,4 +141,21 @@ h1 {
   -webkit-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
   -moz-box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
   box-shadow: 0 0 0 3px #fff, 0 0 0 4px #999, 0 2px 5px 4px rgba(0,0,0,.2);
+}
+
+#progress-bar {
+  clear: left;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.profile-progress {
+  clear: left;
+}
+
+.progress-level {
+  float: left;
+  padding-right: 5px;
+  border-right: solid rgba(255, 255, 255, 0.3) 1px;
+  text-align: right;
 }

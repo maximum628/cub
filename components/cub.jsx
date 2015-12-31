@@ -93,7 +93,8 @@ var Profile = React.createClass({
         avatar_url : null,
         name       : null,
         username   : null,
-        email      : null
+        email      : null,
+        progress   : 70,
       }
   },
 
@@ -122,6 +123,17 @@ var Profile = React.createClass({
             <a href={'http://github.com/' + this.state.username}>{this.state.username}</a>
           </div>
           <div id='email'>{this.state.email}</div>
+        </div>
+
+        <div className="profile-progress">
+          <span className="progress-level" style={{width: '10%'}}>Noob</span>
+          <div id="progress-bar">
+            <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow="70"
+            aria-valuemin="0" aria-valuemax="100" style={{width: this.state.progress + '%', float: 'None'}}>
+              70%
+            </div>
+          </div>
+          <span className="progress-level" style={{width: '100%'}}>Rockstar</span>
         </div>
       </div>
     )

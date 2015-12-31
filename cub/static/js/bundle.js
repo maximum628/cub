@@ -139,7 +139,8 @@
 	        avatar_url : null,
 	        name       : null,
 	        username   : null,
-	        email      : null
+	        email      : null,
+	        progress   : 70,
 	      }
 	  },
 
@@ -168,6 +169,17 @@
 	            React.createElement("a", {href: 'http://github.com/' + this.state.username}, this.state.username)
 	          ), 
 	          React.createElement("div", {id: "email"}, this.state.email)
+	        ), 
+
+	        React.createElement("div", {className: "profile-progress"}, 
+	          React.createElement("span", {className: "progress-level", style: {width: '10%'}}, "Noob"), 
+	          React.createElement("div", {id: "progress-bar"}, 
+	            React.createElement("div", {className: "progress-bar progress-bar-success", role: "progressbar", "aria-valuenow": "70", 
+	            "aria-valuemin": "0", "aria-valuemax": "100", style: {width: this.state.progress + '%', float: 'None'}}, 
+	              "70%"
+	            )
+	          ), 
+	          React.createElement("span", {className: "progress-level", style: {width: '100%'}}, "Rockstar")
 	        )
 	      )
 	    )
