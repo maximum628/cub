@@ -12,7 +12,7 @@ class AccountObjectsOnlyAuthorization(Authorization):
 
 class AccountOnlyAuthorization(Authorization):
     def read_list(self, object_list, bundle):
-        return object_list.filter(username=bundle.request.user.username)
+        return object_list.all()
 
     def read_detail(self, object_list, bundle):
         return bundle.obj.user == bundle.request.user
