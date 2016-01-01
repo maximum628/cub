@@ -9,7 +9,7 @@ from app.models import (Account, CommitContribution, PRContribution, Repository,
     Score)
 
 from app.authorization import (AccountOnlyAuthorization,
-    AccountObjectsOnlyAuthorization)
+    MyAccountOnlyAuthorization, AccountObjectsOnlyAuthorization)
 
 
 class AccountResource(ModelResource):
@@ -18,10 +18,18 @@ class AccountResource(ModelResource):
         excludes = ['id', 'github_token', 'password', 'first_name', 'last_name',
                     'is_active', 'is_staff', 'is_superuser']
         filtering = {'username': ALL, 'email': ALL, 'name': ALL}
-        allowed_methods = ['get', 'update']
+        allowed_methods = ['get']
         authentication = SessionAuthentication()
         authorization = AccountOnlyAuthorization()
 
+class MyAccountResource(ModelResource):
+    class Meta:
+        queryset = Account.objects.all()
+        excludes = ['id', 'password', 'first_name', 'last_name',
+                    'is_active', 'is_staff', 'is_superuser']
+        allowed_methods = ['get', 'update']
+        authentication = SessionAuthentication()
+        authorization = MyAccountOnlyAuthorization()
 
 class CommitContributionResource(resources.MongoEngineResource):
     class Meta:

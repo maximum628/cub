@@ -177,7 +177,7 @@
 	  },
 
 	  componentDidMount: function() {
-	    $.get('/api/v1/account/?format=json', function(res) {
+	    $.get('/api/v1/myaccount/', function(res) {
 	      if (this.isMounted()) {
 	        this.setState({
 	          avatar_url : res.objects[0].avatar_url,
