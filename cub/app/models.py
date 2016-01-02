@@ -111,6 +111,9 @@ class Repository(mongoengine.Document):
     forks_count = mongoengine.IntField(required=True, default=0)
     stargazers_count = mongoengine.IntField(required=True, default=0)
     watchers_count = mongoengine.IntField(required=True, default=0)
+    open_issues = mongoengine.IntField(required=True, default=0)
+    closed_issues = mongoengine.IntField(required=True, default=0)
+    affiliation = mongoengine.StringField(required=True)
 
     @classmethod
     def create_or_update(cls, raw_data, account):
@@ -129,7 +132,9 @@ class Repository(mongoengine.Document):
                 forks_count=raw_data['forks'],
                 fork=str(raw_data['fork']),
                 stargazers_count=raw_data['stargazers_count'],
-                watchers_count=raw_data['watchers_count'])
+                watchers_count=raw_data['watchers_count'],
+                open_issues=raw_data['open_issues_count'],
+                affiliation=raw_data['affiliation'])
         else:
             repo = Repository(
                 cub_account=account,
@@ -142,7 +147,9 @@ class Repository(mongoengine.Document):
                 forks_count=raw_data['forks'],
                 fork=str(raw_data['fork']),
                 stargazers_count=raw_data['stargazers_count'],
-                watchers_count=raw_data['watchers_count']).save()
+                watchers_count=raw_data['watchers_count'],
+                open_issues=raw_data['open_issues_count'],
+                affiliation=raw_data['affiliation']).save()
         return repo
 
 

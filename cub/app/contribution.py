@@ -5,9 +5,18 @@ from app.models import Repository, PRContribution, Score
 
 def get_repos(account_github_token, account_username):
     """Save account public repositories data. """
-    connection = Github(login_or_token=account_github_token)
-    repos = connection.get_user().get_repos(type='public')
+    connection = Github(login_or_token=account_github_token, api_preview=True)
+    repos = connection.get_user().get_repos()
     for repo in repos:
+
+        if repo.raw_data['owner']['type'] == 'User':
+            if repo.raw_data['owner']['login'] != account_username:
+                repo.raw_data['affiliation'] = 'collaborator'
+            else:
+                repo.raw_data['affiliation'] = 'owner'
+        else:
+            repo.raw_data['affiliation'] = 'organization_member'
+
         Repository.create_or_update(repo.raw_data, account_username)
 
 
