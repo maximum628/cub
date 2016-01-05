@@ -44,6 +44,8 @@ if APP_ENVIRONMENT == 'DEV':
         'PASSWORD': ''
     }
 
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
 elif APP_ENVIRONMENT == 'PROD':
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -65,6 +67,7 @@ elif APP_ENVIRONMENT == 'PROD':
         'USER': 'heroku_gjd3tpfs',
         'PASSWORD': 'heroku_gjd3tpfs',
     }
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # General settings
 
@@ -144,8 +147,5 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 )
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "static"),
-)
 
 TASTYPIE_DEFAULT_FORMATS = ['json']
