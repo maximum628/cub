@@ -16,7 +16,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Per Environment settings
-APP_ENVIRONMENT = os.environ.get('APP_ENVIRONMENT') or 'DEV'
+APP_ENVIRONMENT = os.environ.get('APP_ENVIRONMENT', 'DEV')
 
 if APP_ENVIRONMENT == 'DEV':
     # SECURITY WARNING: keep the secret key used in production secret!
