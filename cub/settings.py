@@ -44,19 +44,8 @@ elif APP_ENVIRONMENT == 'PROD':
 
     DEBUG = False
 
-    # Database
-    # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'cub_prod',
-            'USER': os.environ.get('DATABASE_USER'),
-            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-            'HOST': '127.0.0.1',
-            'PORT': '5432',
-        }
-    }
+    import dj_database_url
+    DATABASES['default'] =  dj_database_url.config()
 
     CSRF_COOKIE_SECURE = True
     WSGI_APPLICATION = 'cub.wsgi.prod_application'
