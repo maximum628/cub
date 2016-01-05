@@ -46,8 +46,8 @@ if APP_ENVIRONMENT == 'DEV':
 elif APP_ENVIRONMENT == 'PROD':
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
-    ALLOWED_HOSTS = ['connecthub.herokuapp.com', '0.0.0.0']
-    ALLOWED_INCLUDE_ROOTS = [os.path.join(BASE_DIR)]
+    ALLOWED_HOSTS = ['*']
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     CSRF_COOKIE_SECURE = True
     STATIC_ROOT = os.path.join(BASE_DIR, "static")
