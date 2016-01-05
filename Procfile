@@ -1,1 +1,1 @@
-web: gunicorn wsgi --settings 'settings'
+web: gunicorn cub.wsgi --settings 'settings'
