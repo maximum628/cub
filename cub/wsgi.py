@@ -17,8 +17,6 @@ from cub.settings import MONGO_CONFIG
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cub.settings")
 
-connect(MONGO_CONFIG['NAME'], host=MONGO_CONFIG['HOST'],
-    username=MONGO_CONFIG['USER'], password=MONGO_CONFIG['PASSWORD'],
-    port=MONGO_CONFIG['PORT'])
+connect(MONGO_CONFIG['NAME'], host=MONGO_CONFIG['HOST'])
 
 application = Cling(get_wsgi_application())

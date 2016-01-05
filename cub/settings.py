@@ -36,11 +36,8 @@ if APP_ENVIRONMENT == 'DEV':
     }
 
     MONGO_CONFIG = {
-        'HOST': '127.0.0.1',
-        'PORT': 27017,
         'NAME': 'cub',
-        'USER': '',
-        'PASSWORD': ''
+        'HOST': 'mongodb://127.0.0.1:27017',
     }
 
 elif APP_ENVIRONMENT == 'PROD':
@@ -57,11 +54,8 @@ elif APP_ENVIRONMENT == 'PROD':
     DATABASES = {'default': dj_database_url.config()}
 
     MONGO_CONFIG = {
-        'HOST': 'ds035975.mongolab.com',
-        'PORT': 35975,
-        'NAME': 'heroku_gjd3tpfs',
-        'USER': 'heroku_gjd3tpfs',
-        'PASSWORD': 'heroku_gjd3tpfs',
+        'NAME': 'connecthub',
+        'HOST': os.environ.get('MONGOLAB_URI'),
     }
 
 WSGI_APPLICATION = 'cub.wsgi.application'
