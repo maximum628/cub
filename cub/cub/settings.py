@@ -15,18 +15,53 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# Per Environment settings
+APP_ENVIRONMENT = os.environ.get('APP_ENVIRONMENT') or 'DEV'
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
+if APP_ENVIRONMENT == 'DEV':
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = 'bu0-nf-yu99^$7!8z$#uiz22v6y&3-#i35&f3!s7e+u3ocs*3m'
+    ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '192.168.3.3']
+    DEBUG = True
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'bu0-nf-yu99^$7!8z$#uiz22v6y&3-#i35&f3!s7e+u3ocs*3m'
+    # Database
+    # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'cub.sqlite3'
+        }
+    }
 
-ALLOWED_HOSTS = ['*']
+    WSGI_APPLICATION = 'cub.wsgi.dev_application'
 
+elif APP_ENVIRONMENT == 'PROD':
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+
+    ALLOWED_HOSTS = ['connecthub.herokuapp.com']
+    ALLOWED_INCLUDE_ROOTS = [os.path.join(BASE_DIR)]
+
+    DEBUG = False
+
+    # Database
+    # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'cub_prod',
+            'USER': os.environ.get('DATABASE_USER'),
+            'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+            'HOST': '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
+
+    CSRF_COOKIE_SECURE = True
+    WSGI_APPLICATION = 'cub.wsgi.prod_application'
+
+# General settings
 
 # Application definition
 
@@ -83,18 +118,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'cub.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'cub.sqlite3'
-    }
-}
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 

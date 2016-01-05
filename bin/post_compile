@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+if [ -f bin/build_fe ]; then
+    echo "-----> Building frontend"
+    chmod +x bin/build_fe
+    bin/build_fe

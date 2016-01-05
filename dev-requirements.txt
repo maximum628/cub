@@ -5,8 +5,5 @@ mongoengine==0.10.1
 django-tastypie==0.12.2
 django-tastypie-mongoengine==0.4.6
 https://github.com/maria/PyGithub/tarball/add-oauth-authentication
-# Deploy
-gunicorn
-dj-database-url
-dj-static
-psycopg2
+# Needed to keep wsgi for dev and prod in one place
+dj_static
