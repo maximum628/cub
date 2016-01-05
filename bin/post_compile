@@ -5,3 +5,4 @@ if [ -f bin/build_fe ]; then
     echo "-----> Building frontend"
     chmod +x bin/build_fe
     bin/build_fe
+fi
