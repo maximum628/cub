@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 import mongoengine
@@ -40,6 +42,19 @@ class Account(AbstractUser):
         account.set_password(data['github_token'])
         account.save()
         return account
+
+
+class AbstractJSONDocument(mongoengine.Document):
+
+    meta = {'abstract': True}
+
+    @classmethod
+    def save_document(cls, data):
+        document = cls()
+        for key, value in data.iteritems():
+            setattr(document, key, value)
+        document.save()
+        return document
 
 
 class Contribution(mongoengine.Document):
@@ -181,3 +196,15 @@ class Score(mongoengine.Document):
             forks += repo.forks_count
 
         return watchers, stargazers, forks
+
+
+class Contact(AbstractJSONDocument):
+
+    meta = {
+        'indexes': [{'fields': ['email']}]
+    }
+
+    name = mongoengine.StringField(required=True)
+    email = mongoengine.EmailField(required=True)
+    content = mongoengine.StringField(required=True)
+    created_at = mongoengine.DateTimeField(required=True, default=datetime.datetime.now)

@@ -6,7 +6,7 @@ from tastypie.api import Api
 
 from app.api import (AccountResource, MyAccountResource,
     CommitContributionResource, PRContributionResource, RepositoryResource,
-    ScoreResource)
+    ScoreResource, ContactResource)
 from app.views import (AuthorizeGitHubURL, AuthenticateGitHubAccount,
     LogoutGitHubAccount, Home, Contributions)
 
@@ -17,6 +17,7 @@ v1_api.register(CommitContributionResource())
 v1_api.register(PRContributionResource())
 v1_api.register(RepositoryResource())
 v1_api.register(ScoreResource())
+v1_api.register(ContactResource())
 
 urlpatterns = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += [

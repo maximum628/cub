@@ -6,9 +6,9 @@ from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
 from app.models import (Account, CommitContribution, PRContribution, Repository,
-    Score)
+    Score, Contact)
 
-from app.authorization import (AccountOnlyAuthorization,
+from app.authorization import (AccountOnlyAuthorization, ContactAuthorization,
     MyAccountOnlyAuthorization, AccountObjectsOnlyAuthorization)
 
 
@@ -22,6 +22,7 @@ class AccountResource(ModelResource):
         authentication = SessionAuthentication()
         authorization = AccountOnlyAuthorization()
 
+
 class MyAccountResource(ModelResource):
     class Meta:
         queryset = Account.objects.all()
@@ -30,6 +31,7 @@ class MyAccountResource(ModelResource):
         allowed_methods = ['get', 'update']
         authentication = SessionAuthentication()
         authorization = MyAccountOnlyAuthorization()
+
 
 class CommitContributionResource(resources.MongoEngineResource):
     class Meta:
@@ -67,3 +69,10 @@ class ScoreResource(resources.MongoEngineResource):
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
         paginator_class = Paginator
+
+
+class ContactResource(resources.MongoEngineResource):
+    class Meta:
+        queryset = Contact.objects.all()
+        allowed_methods = ['post']
+        authorization = ContactAuthorization()

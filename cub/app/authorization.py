@@ -37,3 +37,11 @@ class MyAccountOnlyAuthorization(Authorization):
 
     def update_detail(self, object_list, bundle):
         return bundle.obj.user == bundle.request.user
+
+
+class ContactAuthorization(Authorization):
+    def post_list(self, object_list, bundle):
+        return True
+
+    def post_detail(self, object_list, bundle):
+        return True
