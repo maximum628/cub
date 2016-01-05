@@ -23,6 +23,7 @@ if APP_ENVIRONMENT == 'DEV':
     SECRET_KEY = 'bu0-nf-yu99^$7!8z$#uiz22v6y&3-#i35&f3!s7e+u3ocs*3m'
     ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '192.168.3.3']
     DEBUG = True
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
     # Database
     # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
@@ -34,8 +35,6 @@ if APP_ENVIRONMENT == 'DEV':
         }
     }
 
-    WSGI_APPLICATION = 'cub.wsgi.dev_application'
-
     MONGO_CONFIG = {
         'HOST': '127.0.0.1',
         'PORT': 27017,
@@ -44,21 +43,18 @@ if APP_ENVIRONMENT == 'DEV':
         'PASSWORD': ''
     }
 
-    STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
-
 elif APP_ENVIRONMENT == 'PROD':
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
     ALLOWED_HOSTS = ['connecthub.herokuapp.com']
     ALLOWED_INCLUDE_ROOTS = [os.path.join(BASE_DIR)]
 
+    CSRF_COOKIE_SECURE = True
+    STATIC_ROOT = os.path.join(BASE_DIR, "static")
     DEBUG = False
 
     import dj_database_url
     DATABASES = {'default': dj_database_url.config()}
-
-    CSRF_COOKIE_SECURE = True
-    WSGI_APPLICATION = 'cub.wsgi.prod_application'
 
     MONGO_CONFIG = {
         'HOST': 'ds035975.mongolab.com',
@@ -67,8 +63,8 @@ elif APP_ENVIRONMENT == 'PROD':
         'USER': 'heroku_gjd3tpfs',
         'PASSWORD': 'heroku_gjd3tpfs',
     }
-    STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
+WSGI_APPLICATION = 'cub.wsgi.application'
 # General settings
 
 # Application definition

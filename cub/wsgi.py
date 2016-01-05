@@ -14,5 +14,8 @@ from dj_static import Cling, MediaCling
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cub.settings")
 
-dev_application = get_wsgi_application()
-prod_application = Cling(MediaCling(get_wsgi_application()))
+from cub.settings import APP_ENVIRONMENT
+if APP_ENVIRONMENT == 'PROD':
+    application = Cling(MediaCling(get_wsgi_application()))
+else:
+    application = get_wsgi_application()
