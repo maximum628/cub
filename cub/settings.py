@@ -36,6 +36,14 @@ if APP_ENVIRONMENT == 'DEV':
 
     WSGI_APPLICATION = 'cub.wsgi.dev_application'
 
+    MONGO_CONFIG = {
+        'HOST': '127.0.0.1',
+        'PORT': 27017,
+        'NAME': 'cub',
+        'USER': '',
+        'PASSWORD': ''
+    }
+
 elif APP_ENVIRONMENT == 'PROD':
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
@@ -49,6 +57,14 @@ elif APP_ENVIRONMENT == 'PROD':
 
     CSRF_COOKIE_SECURE = True
     WSGI_APPLICATION = 'cub.wsgi.prod_application'
+
+    MONGO_CONFIG = {
+        'HOST': 'ds035975.mongolab.com',
+        'PORT': 35975,
+        'NAME': 'heroku_gjd3tpfs',
+        'USER': 'heroku_gjd3tpfs',
+        'PASSWORD': 'heroku_gjd3tpfs',
+    }
 
 # General settings
 
