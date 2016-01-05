@@ -53,7 +53,8 @@ elif APP_ENVIRONMENT == 'PROD':
     DEBUG = False
 
     import dj_database_url
-    DATABASES = {'default': dj_database_url.config()}
+    DATABASES = {}
+    DATABASES['default'] = dj_database_url.config()
 
     CSRF_COOKIE_SECURE = True
     WSGI_APPLICATION = 'cub.wsgi.prod_application'
