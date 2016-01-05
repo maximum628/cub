@@ -1,7 +1,7 @@
 module.exports = {
   entry: './components/cub.jsx',
   output: {
-    filename: 'cub/static/js/bundle.js'
+    filename: 'static/js/bundle.js'
   },
   module: {
     loaders: [{

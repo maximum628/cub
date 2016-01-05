@@ -8,7 +8,7 @@ import mongoengine
 class Account(AbstractUser):
 
     class Meta:
-        app_label = 'app'
+        app_label = 'backend'
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ('email', 'github_token')

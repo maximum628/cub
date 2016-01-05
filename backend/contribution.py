@@ -1,6 +1,6 @@
 from github import Github
 
-from app.models import Repository, PRContribution, Score
+from backend.models import Repository, PRContribution, Score
 
 
 def get_repos(account_github_token, account_username):

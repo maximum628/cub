@@ -3,10 +3,10 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.views.generic import View, TemplateView
 
-from app.helpers import get_github_user_info
-from app.models import Account
-from app.oauth_github import ConnectGitHub
-from app.tasks import get_contributions
+from backend.helpers import get_github_user_info
+from backend.models import Account
+from backend.oauth_github import ConnectGitHub
+from backend.tasks import get_contributions
 
 
 class Home(TemplateView):

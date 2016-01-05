@@ -5,10 +5,10 @@ from tastypie.paginator import Paginator
 from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
-from app.models import (Account, CommitContribution, PRContribution, Repository,
+from backend.models import (Account, CommitContribution, PRContribution, Repository,
     Score, Contact)
 
-from app.authorization import (AccountOnlyAuthorization, ContactAuthorization,
+from backend.authorization import (AccountOnlyAuthorization, ContactAuthorization,
     MyAccountOnlyAuthorization, AccountObjectsOnlyAuthorization)
 
 

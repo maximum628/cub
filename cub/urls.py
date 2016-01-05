@@ -4,10 +4,10 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from tastypie.api import Api
 
-from app.api import (AccountResource, MyAccountResource,
+from backend.api import (AccountResource, MyAccountResource,
     CommitContributionResource, PRContributionResource, RepositoryResource,
     ScoreResource, ContactResource)
-from app.views import (AuthorizeGitHubURL, AuthenticateGitHubAccount,
+from backend.views import (AuthorizeGitHubURL, AuthenticateGitHubAccount,
     LogoutGitHubAccount, Home, Contributions)
 
 v1_api = Api(api_name='v1')

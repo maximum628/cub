@@ -2,8 +2,8 @@ import urllib
 
 from github.Requester import Requester
 
-from app.models import Account
-from app.parameters import (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, DEFAULT_TIMEOUT,
+from backend.models import Account
+from backend.parameters import (GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, DEFAULT_TIMEOUT,
     DEFAULT_USER_AGENT, GITHUB_BASE_URL, GITHUB_AUTHORIZE_URL, GITHUB_TOKEN_URL)
 
 

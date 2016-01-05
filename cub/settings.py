@@ -72,7 +72,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app',
+    'backend',
     'tastypie',
     'tastypie_mongoengine',
 )
@@ -88,7 +88,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
 )
 
-AUTH_USER_MODEL = 'app.Account'
+AUTH_USER_MODEL = 'backend.Account'
 
 PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
