@@ -1,8 +1,12 @@
+import os
 import datetime
 
 from django.contrib.auth.models import AbstractUser
+from django.core.mail import send_mail
 from django.db import models
 import mongoengine
+
+from cub.settings import CONTACT_ADMINS, EMAIL_HOST_USER
 
 
 class Account(AbstractUser):
@@ -209,3 +213,15 @@ class Contact(AbstractJSONDocument):
     email = mongoengine.EmailField(required=True)
     content = mongoengine.StringField(required=True)
     created_at = mongoengine.DateTimeField(required=True, default=datetime.datetime.now)
+
+    @classmethod
+    def send_email(cls, sender, document, **kwargs):
+        send_mail(
+            subject='CUB Feedback received',
+            message='A new feedback was submitted.\n Details: %r' % document.to_json(),
+            from_email=EMAIL_HOST_USER,
+            recipient_list=CONTACT_ADMINS,
+            fail_silently=True)
+
+
+mongoengine.signals.post_save.connect(Contact.send_email, sender=Contact)

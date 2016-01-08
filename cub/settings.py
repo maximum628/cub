@@ -15,6 +15,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+CONTACT_ADMINS = ('maria.nita.dn@gmail.com',)
 # Per Environment settings
 APP_ENVIRONMENT = os.environ.get('APP_ENVIRONMENT', 'DEV')
 
@@ -141,3 +142,11 @@ STATIC_URL = '/static/'
 TASTYPIE_DEFAULT_FORMATS = ['json']
 
 CONTRIB_DELTA = 600
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = os.environ.get('MAILGUN_SMTP_SERVER')
+EMAIL_HOST_USER = os.environ.get('MAILGUN_SMTP_LOGIN')
+EMAIL_HOST_PASSWORD = os.environ.get('MAILGUN_SMTP_PASSWORD')
+EMAIL_API_URL = os.environ.get('MAILGUN_DOMAIN')
+EMAIL_API_KEY = os.environ.get('MAILGUN_API_KEY')
+EMAIL_PORT = os.environ.get('MAILGUN_SMTP_PORT')

@@ -7,6 +7,7 @@ mongoengine==0.10.1
 django-tastypie==0.12.2
 django-tastypie-mongoengine==0.4.6
 https://github.com/maria/PyGithub/tarball/add-oauth-authentication
+blinker
 # Deploy
 gunicorn
 dj-database-url
