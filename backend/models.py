@@ -17,6 +17,7 @@ class Account(AbstractUser):
     name = models.CharField(max_length=128)
     github_url = models.URLField(blank=False)
     avatar_url = models.URLField()
+    synced = models.IntegerField(null=True)
 
     @classmethod
     def verify(cls, data):

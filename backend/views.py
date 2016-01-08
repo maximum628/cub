@@ -6,7 +6,7 @@ from django.views.generic import View, TemplateView
 from backend.helpers import get_github_user_info
 from backend.models import Account
 from backend.oauth_github import ConnectGitHub
-from backend.tasks import get_contributions
+from backend.tasks import get_all_contributions
 
 
 class Home(TemplateView):
@@ -52,5 +52,5 @@ class Contributions(View):
 
     def get(self, request):
         account = Account.objects.get(username=request.user.username)
-        get_contributions(account.github_token, account.username)
+        get_all_contributions(account)
         return redirect('/')
