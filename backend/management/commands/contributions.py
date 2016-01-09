@@ -22,5 +22,4 @@ class Command(BaseCommand):
                     'Successfully fetched all user  "%s" contributions' % username)
         else:
             get_all_contributions()
-
-        self.stdout.write('Successfully fetched all users contributions')
+            self.stdout.write('Successfully fetched all users contributions')

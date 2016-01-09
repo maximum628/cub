@@ -26,8 +26,9 @@ def get_all_contributions(account=None):
     if account:
         if account.synced <= sync:
             get_contributions(account)
-        else:
-            return account
+        return account
+
     else:
         for account in Account.objects.filter(synced__lte=sync):
             get_contributions(account)
+        return True
