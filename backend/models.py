@@ -134,7 +134,7 @@ class Repository(mongoengine.Document):
     watchers_count = mongoengine.IntField(required=True, default=0)
     open_issues = mongoengine.IntField(required=True, default=0)
     closed_issues = mongoengine.IntField(required=True, default=0)
-    affiliation = mongoengine.StringField(required=True)
+    affiliation = mongoengine.StringField(required=True, default='unknown')
 
     @classmethod
     def create_or_update(cls, raw_data, account):
