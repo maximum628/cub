@@ -4,9 +4,10 @@ import datetime
 from django.contrib.auth.models import AbstractUser
 from django.core.mail import send_mail
 from django.db import models
+from django.template.loader import render_to_string
 import mongoengine
 
-from cub.settings import CONTACT_ADMINS, EMAIL_HOST_USER
+from cub.settings import CONTACT_ADMINS, EMAIL_HOST_USER, BASE_DIR
 
 
 class Account(AbstractUser):
@@ -216,12 +217,29 @@ class Contact(AbstractJSONDocument):
 
     @classmethod
     def send_email(cls, sender, document, **kwargs):
+        msg_html = render_to_string(
+            '%s/backend/templates/email/contact/notify_team.html' % BASE_DIR,
+            {'document': document})
+
         send_mail(
-            subject='CUB Feedback received',
-            message='A new feedback was submitted.\n Details: %r' % document.to_json(),
-            from_email=EMAIL_HOST_USER,
+            subject='CUB - Feedback received',
+            message='New Feedback was received.',
+            html_message=msg_html,
+            from_email='Connect Hub - CUB <%s>' % EMAIL_HOST_USER,
             recipient_list=CONTACT_ADMINS,
             fail_silently=True)
 
+
+        msg_html = render_to_string(
+            '%s/backend/templates/email/contact/confirm_user.html' % BASE_DIR,
+            {'document': document})
+
+        send_mail(
+            subject='CUB - Feedback sent',
+            message='We confirm we received your feedback message.',
+            html_message=msg_html,
+            from_email='Connect Hub - CUB <%s>' % EMAIL_HOST_USER,
+            recipient_list=CONTACT_ADMINS,
+            fail_silently=True)
 
 mongoengine.signals.post_save.connect(Contact.send_email, sender=Contact)
