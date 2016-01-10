@@ -184,7 +184,10 @@ class Score(mongoengine.Document):
 
     @classmethod
     def compute(cls, account):
-        watchers, stargazers, forks = Score.get_repo_stats(account)
+        watchers = Repository.objects.filter(cub_account=account).sum('watchers_count')
+        stargazers = Repository.objects.filter(cub_account=account).sum('stargazers_count')
+        forks = Repository.objects.filter(cub_account=account).sum('forks_count')
+
         live_score =  watchers + stargazers + forks
 
         if Score.objects(cub_account=account):
@@ -196,19 +199,6 @@ class Score(mongoengine.Document):
                 watchers_count=watchers, forks_count=forks,
                 stargazers_count=stargazers).save()
         return score
-
-    @classmethod
-    def get_repo_stats(cls, account):
-        watchers = 0
-        stargazers = 0
-        forks = 0
-
-        for repo in Repository.objects(cub_account=account):
-            watchers += repo.watchers_count
-            stargazers += repo.stargazers_count
-            forks += repo.forks_count
-
-        return watchers, stargazers, forks
 
 
 class Contact(AbstractJSONDocument):

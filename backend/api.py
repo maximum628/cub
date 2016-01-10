@@ -87,6 +87,7 @@ class PRContributionResource(resources.MongoEngineResource):
 class RepositoryResource(resources.MongoEngineResource):
     class Meta:
         queryset = Repository.objects.all()
+        filtering = {'name': ALL, 'affiliation': ALL}
         allowed_methods = ['get', 'post']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
