@@ -178,16 +178,23 @@ class Score(mongoengine.Document):
 
     cub_account = mongoengine.StringField(required=True, unique=True)
     score = mongoengine.IntField(required=True)
+    watchers_count = mongoengine.IntField()
+    forks_count = mongoengine.IntField()
+    stargazers_count = mongoengine.IntField()
 
     @classmethod
     def compute(cls, account):
-        watchers, stargazers_count, forks = Score.get_repo_stats(account)
-        live_score =  watchers + stargazers_count + forks
+        watchers, stargazers, forks = Score.get_repo_stats(account)
+        live_score =  watchers + stargazers + forks
 
         if Score.objects(cub_account=account):
-            score = Score.objects.get(cub_account=account).modify(score=live_score)
+            score = Score.objects.get(cub_account=account).modify(
+                score=live_score, watchers_count=watchers,
+                forks_count=forks, stargazers_count=stargazers)
         else:
-            score = Score(cub_account=account, score=live_score).save()
+            score = Score(cub_account=account, score=live_score,
+                watchers_count=watchers, forks_count=forks,
+                stargazers_count=stargazers).save()
         return score
 
     @classmethod

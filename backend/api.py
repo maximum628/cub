@@ -1,3 +1,4 @@
+from tastypie import fields
 from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization, DjangoAuthorization
 from tastypie.constants import ALL
@@ -24,6 +25,13 @@ class AccountResource(ModelResource):
 
 
 class MyAccountResource(ModelResource):
+
+    forks_count = fields.IntegerField()
+    stargazers_count = fields.IntegerField()
+    watchers_count = fields.IntegerField()
+    pulls_count = fields.IntegerField()
+
+
     class Meta:
         queryset = Account.objects.all()
         excludes = ['id', 'password', 'first_name', 'last_name',
@@ -31,6 +39,18 @@ class MyAccountResource(ModelResource):
         allowed_methods = ['get', 'update']
         authentication = SessionAuthentication()
         authorization = MyAccountOnlyAuthorization()
+
+    def dehydrate_forks_count(self, bundle):
+        return Score.objects.get(cub_account=bundle.obj.username).forks_count
+
+    def dehydrate_stargazers_count(self, bundle):
+        return Score.objects.get(cub_account=bundle.obj.username).stargazers_count
+
+    def dehydrate_watchers_count(self, bundle):
+        return Score.objects.get(cub_account=bundle.obj.username).watchers_count
+
+    def dehydrate_pulls_count(self, bundle):
+        return PRContribution.objects.filter(cub_account=bundle.obj.username).count()
 
 
 class CommitContributionResource(resources.MongoEngineResource):
