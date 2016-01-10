@@ -6,6 +6,7 @@ from tastypie.paginator import Paginator
 from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
+from backend.contribution import get_repos, get_pulls, get_score, get_commits
 from backend.models import (Account, CommitContribution, PRContribution, Repository,
     Score, Contact)
 
@@ -36,7 +37,7 @@ class MyAccountResource(ModelResource):
         queryset = Account.objects.all()
         excludes = ['id', 'password', 'first_name', 'last_name',
                     'is_active', 'is_staff', 'is_superuser']
-        allowed_methods = ['get', 'update']
+        allowed_methods = ['get']
         authentication = SessionAuthentication()
         authorization = MyAccountOnlyAuthorization()
 
@@ -56,39 +57,60 @@ class MyAccountResource(ModelResource):
 class CommitContributionResource(resources.MongoEngineResource):
     class Meta:
         queryset = CommitContribution.objects.all()
-        allowed_methods = ['get']
+        resource_name = 'commits'
+        allowed_methods = ['get', 'post']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
         paginator_class = Paginator
+
+    def obj_create(self, bundle, request = None, **kwargs):
+        get_commits(bundle.obj.username)
+        bundle.obj.data = {}
+        return bundle
 
 
 class PRContributionResource(resources.MongoEngineResource):
     class Meta:
         queryset = PRContribution.objects.all()
         resource_name = 'pulls'
-        allowed_methods = ['get']
+        allowed_methods = ['get', 'post']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
         paginator_class = Paginator
+
+    def obj_create(self, bundle, request = None, **kwargs):
+        get_pulls(bundle.obj.github_token, bundle.obj.username)
+        bundle.obj.data = {}
+        return bundle
 
 
 class RepositoryResource(resources.MongoEngineResource):
     class Meta:
         queryset = Repository.objects.all()
-        allowed_methods = ['get']
+        allowed_methods = ['get', 'post']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
         paginator_class = Paginator
+
+    def obj_create(self, bundle, request = None, **kwargs):
+        get_repos(bundle.obj.github_token, bundle.obj.username)
+        bundle.obj.data = {}
+        return bundle
 
 
 class ScoreResource(resources.MongoEngineResource):
     class Meta:
         queryset = Score.objects.all()
-        allowed_methods = ['get']
+        allowed_methods = ['get', 'post']
         excludes = ['live_score']
         authentication = SessionAuthentication()
         authorization = AccountObjectsOnlyAuthorization()
         paginator_class = Paginator
+
+    def obj_create(self, bundle, request = None, **kwargs):
+        get_score(bundle.obj.username)
+        bundle.obj.data = {}
+        return bundle
 
 
 class ContactResource(resources.MongoEngineResource):
