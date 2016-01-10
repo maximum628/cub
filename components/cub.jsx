@@ -42,22 +42,25 @@ var RepoList = React.createClass({
       return {
         repos: [],
         offset: 0,
-        pageNum: 1
+        pageNum: 1,
+        nextOffset: per_page,
+        previousOffset: 0
       }
   },
 
   getRepoList: function() {
     var offset = this.state.offset;
     var nextOffset = offset + per_page;
+    var previousOffset = (offset - per_page < 1) ? 0 : offset - per_page;
     var url = '/api/v1/repository/?offset=' + offset + '&limit=' + per_page;
 
     $.get(url, function(res) {
       this.setState({
         repos: res.objects,
-        offset: nextOffset,
-        pageNum: res.meta.total_count / per_page
-      });
-    }.bind(this));
+        nextOffset: nextOffset,
+        previousOffset: previousOffset,
+        pageNum: Math.ceil(res.meta.total_count / per_page )})
+     }.bind(this));
   },
 
   componentDidMount: function() {
@@ -67,10 +70,13 @@ var RepoList = React.createClass({
   },
 
   handleClick: function(event) {
+    var pageSelected = event.selected;
+
     this.setState({
-      offset: this.state.offset + per_page
+      offset: pageSelected * per_page
+    }, () => {
+      this.getRepoList();
     });
-    this.getRepoList();
   },
 
   render: function() {
