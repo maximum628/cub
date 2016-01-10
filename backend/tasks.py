@@ -1,6 +1,6 @@
 import time
 
-from backend.contribution import get_repos, get_pulls, get_live_score
+from backend.contribution import get_repos, get_pulls, get_score
 from backend.models import Account
 from cub.settings import CONTRIB_DELTA
 
@@ -14,7 +14,7 @@ def get_contributions(account):
     account.synced = int(time.time())
     account.save()
 
-    get_live_score(account.username)
+    get_score(account.username)
     account.synced = int(time.time())
     account.save()
 

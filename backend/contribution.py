@@ -36,5 +36,5 @@ def get_commits(account_username):
     pass
 
 
-def get_live_score(account_username):
+def get_score(account_username):
     return Score.compute(account_username)
