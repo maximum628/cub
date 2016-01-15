@@ -221,11 +221,60 @@ var RepoPage = React.createClass({
 
 
 var ContactPage = React.createClass({
+
+  getInitialState: function() {
+    return {
+    };
+  },
+
+  handleNameChange: function(event) {
+    this.setState({fullName: event.target.value});
+  },
+
+  handleEmailChange: function(event) {
+    this.setState({email: event.target.value});
+  },
+
+  handleContentChange: function(event) {
+    this.setState({content: event.target.value});
+  },
+
+  handleSubmit: function(event) {
+    var data = JSON.stringify({
+      name: this.state.fullName,
+      email: this.state.email,
+      content: this.state.content
+    });
+
+    $.ajaxSetup({
+      beforeSend: function(xhr, settings) {
+        xhr.setRequestHeader("X-CSRFToken", Django.csrf_token());
+        xhr.setRequestHeader("Content-Type", 'application/json');
+      }
+    });
+
+    $.ajax({
+       type: 'POST',
+       url: '/api/v1/contact/',
+       data: data,
+     })
+     .done(function(data) {
+     })
+     .fail(function(jqXhr) {
+     });
+  },
+
   render: function() {
     return (
       <div>
         <Nav />
-        <h1>Get in touch</h1>
+        <h1>Get in touch with us</h1>
+        <form id="contact-form">
+        <input id="contact-form__name" type="text" value={this.state.fullName} placeholder='Full name' onChange={this.handleNameChange}/>
+        <input id="contact-form__email" type="email" value={this.state.email} placeholder='Email' onChange={this.handleEmailChange}/>
+        <textarea id="contact-form__content" value={this.state.content} placeholder='Your message' onChange={this.handleContentChange} />
+        <button id="contact-form__submit" onClick={this.handleSubmit}> Send </button>
+        </form>
       </div>
     )
   }

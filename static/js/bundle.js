@@ -267,11 +267,62 @@
 
 
 	var ContactPage = React.createClass({displayName: "ContactPage",
+
+	  getInitialState: function() {
+	    return {
+	    };
+	  },
+
+	  handleNameChange: function(event) {
+	    this.setState({fullName: event.target.value});
+	  },
+
+	  handleEmailChange: function(event) {
+	    this.setState({email: event.target.value});
+	  },
+
+	  handleContentChange: function(event) {
+	    this.setState({content: event.target.value});
+	  },
+
+	  handleSubmit: function(event) {
+	    var data = JSON.stringify({
+	      name: this.state.fullName,
+	      email: this.state.email,
+	      content: this.state.content
+	    });
+
+	    $.ajaxSetup({
+	      beforeSend: function(xhr, settings) {
+	        xhr.setRequestHeader("X-CSRFToken", Django.csrf_token());
+	        xhr.setRequestHeader("Content-Type", 'application/json');
+	      }
+	    });
+
+	    $.ajax({
+	       type: 'POST',
+	       url: '/api/v1/contact/',
+	       data: data,
+	     })
+	     .done(function(data) {
+	       console.log('Success');
+	     })
+	     .fail(function(jqXhr) {
+	      console.log(jqXhr.responseText);
+	     });
+	  },
+
 	  render: function() {
 	    return (
 	      React.createElement("div", null, 
 	        React.createElement(Nav, null), 
-	        React.createElement("h1", null, "Get in touch")
+	        React.createElement("h1", null, "Get in touch with us"), 
+	        React.createElement("form", {id: "contact-form"}, 
+	        React.createElement("input", {id: "contact-form__name", type: "text", value: this.state.fullName, placeholder: "Full name", onChange: this.handleNameChange}), 
+	        React.createElement("input", {id: "contact-form__email", type: "email", value: this.state.email, placeholder: "Email", onChange: this.handleEmailChange}), 
+	        React.createElement("textarea", {id: "contact-form__content", value: this.state.content, placeholder: "Your message", onChange: this.handleContentChange}), 
+	        React.createElement("button", {id: "contact-form__submit", onClick: this.handleSubmit}, " Send ")
+	        )
 	      )
 	    )
 	  }

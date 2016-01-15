@@ -186,3 +186,11 @@ h1 {
   padding-left: 15px;
   padding-right: 15px;
 }
+/* Contact Form */
+#contact-form {
+  color: #165D9A;
+}
+
+#contact-form input:focus, textarea:focus, button:focus {
+  color: red;
+}

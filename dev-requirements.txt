@@ -6,6 +6,8 @@ pymongo==3.1.1
 mongoengine==0.10.1
 django-tastypie==0.12.2
 django-tastypie-mongoengine==0.4.6
+blinker
+django.js
 https://github.com/maria/PyGithub/tarball/add-oauth-authentication
 # Needed to keep wsgi for dev and prod in one place
 dj_static

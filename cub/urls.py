@@ -27,6 +27,7 @@ urlpatterns += [
     url(r'^authenticate/', AuthenticateGitHubAccount.as_view(), name='authenticate'),
     url(r'^logout/', LogoutGitHubAccount.as_view(), name='logout'),
     url(r'^contribution/', Contributions.as_view(), name='contrib'),
+    url(r'^djangojs/', include('djangojs.urls')),
     # Leave it last
     url(r'^[\w]*', Home.as_view(), name='home')
 ]
