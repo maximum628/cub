@@ -33,8 +33,8 @@ class MyAccountOnlyAuthorization(Authorization):
 
 
 class ContactAuthorization(Authorization):
-    def post_list(self, object_list, bundle):
+    def create_list(self, object_list, bundle):
         return True
 
-    def post_detail(self, object_list, bundle):
+    def create_detail(self, object_detail, bundle):
         return True
