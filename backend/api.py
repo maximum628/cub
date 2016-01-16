@@ -7,26 +7,14 @@ from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
 from backend.contribution import get_repos, get_pulls, get_score, get_commits
-from backend.models import (Account, CommitContribution, PRContribution, Repository,
-    Score, Contact)
+from backend.models import (Account, CommitContribution, PRContribution,
+    Repository, Score)
 
-from backend.authorization import (AccountOnlyAuthorization, ContactAuthorization,
-    MyAccountOnlyAuthorization, AccountObjectsOnlyAuthorization)
+from backend.authorization import (MyAccountOnlyAuthorization,
+    AccountObjectsOnlyAuthorization)
 
 
 class AccountResource(ModelResource):
-    class Meta:
-        queryset = Account.objects.all()
-        excludes = ['id', 'github_token', 'password', 'first_name', 'last_name',
-                    'is_active', 'is_staff', 'is_superuser']
-        filtering = {'username': ALL, 'email': ALL, 'name': ALL}
-        allowed_methods = ['get']
-        authentication = SessionAuthentication()
-        authorization = AccountOnlyAuthorization()
-
-
-class MyAccountResource(ModelResource):
-
     forks_count = fields.IntegerField()
     stargazers_count = fields.IntegerField()
     watchers_count = fields.IntegerField()
@@ -112,10 +100,3 @@ class ScoreResource(resources.MongoEngineResource):
         get_score(bundle.obj.username)
         bundle.obj.data = {}
         return bundle
-
-
-class ContactResource(resources.MongoEngineResource):
-    class Meta:
-        queryset = Contact.objects.all()
-        allowed_methods = ['post']
-        authorization = ContactAuthorization()

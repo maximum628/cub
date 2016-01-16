@@ -137,7 +137,7 @@ var Profile = React.createClass({
   },
 
   componentDidMount: function() {
-    $.get('/api/v1/myaccount/', function(res) {
+    $.get('/api/v1/account/', function(res) {
       if (this.isMounted()) {
         this.setState({
           avatar_url : res.objects[0].avatar_url,
@@ -255,7 +255,7 @@ var ContactPage = React.createClass({
 
     $.ajax({
        type: 'POST',
-       url: '/api/v1/contact/',
+       url: '/api/public/contact/',
        data: data,
      })
      .done(function(data) {
