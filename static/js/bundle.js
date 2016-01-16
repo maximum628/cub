@@ -305,10 +305,8 @@
 	       data: data,
 	     })
 	     .done(function(data) {
-	       console.log('Success');
 	     })
 	     .fail(function(jqXhr) {
-	      console.log(jqXhr.responseText);
 	     });
 	  },
 
@@ -316,12 +314,16 @@
 	    return (
 	      React.createElement("div", null, 
 	        React.createElement(Nav, null), 
-	        React.createElement("h1", null, "Get in touch with us"), 
-	        React.createElement("form", {id: "contact-form"}, 
-	        React.createElement("input", {id: "contact-form__name", type: "text", value: this.state.fullName, placeholder: "Full name", onChange: this.handleNameChange}), 
-	        React.createElement("input", {id: "contact-form__email", type: "email", value: this.state.email, placeholder: "Email", onChange: this.handleEmailChange}), 
-	        React.createElement("textarea", {id: "contact-form__content", value: this.state.content, placeholder: "Your message", onChange: this.handleContentChange}), 
-	        React.createElement("button", {id: "contact-form__submit", onClick: this.handleSubmit}, " Send ")
+	        React.createElement("form", {className: "col-md-6 col-md-offset-3", id: "contact-form"}, 
+	          React.createElement("h1", null, "Get in touch with us"), 
+	            React.createElement("div", {className: "form-group"}, 
+	              React.createElement("input", {type: "text", value: this.state.fullName, placeholder: "Full name", onChange: this.handleNameChange}), 
+	              React.createElement("input", {type: "email", value: this.state.email, placeholder: "Email", onChange: this.handleEmailChange})
+	            ), 
+	              React.createElement("textarea", {value: this.state.content, placeholder: "Your message", onChange: this.handleContentChange}), 
+	            React.createElement("div", {className: "form-group"}, 
+	              React.createElement("button", {id: "contact-form__submit", className: "btn btn-primary", onClick: this.handleSubmit}, " Send ")
+	            )
 	        )
 	      )
 	    )

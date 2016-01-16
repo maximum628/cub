@@ -268,12 +268,16 @@ var ContactPage = React.createClass({
     return (
       <div>
         <Nav />
-        <h1>Get in touch with us</h1>
-        <form id="contact-form">
-        <input id="contact-form__name" type="text" value={this.state.fullName} placeholder='Full name' onChange={this.handleNameChange}/>
-        <input id="contact-form__email" type="email" value={this.state.email} placeholder='Email' onChange={this.handleEmailChange}/>
-        <textarea id="contact-form__content" value={this.state.content} placeholder='Your message' onChange={this.handleContentChange} />
-        <button id="contact-form__submit" onClick={this.handleSubmit}> Send </button>
+        <form className="col-md-6 col-md-offset-3" id="contact-form">
+          <h1>Get in touch with us</h1>
+            <div className="form-group">
+              <input type="text" value={this.state.fullName} placeholder='Full name' onChange={this.handleNameChange}/>
+              <input type="email" value={this.state.email} placeholder='Email' onChange={this.handleEmailChange}/>
+            </div>
+              <textarea value={this.state.content} placeholder='Your message' onChange={this.handleContentChange}/>
+            <div className="form-group">
+              <button id="contact-form__submit" className="btn btn-primary" onClick={this.handleSubmit}> Send </button>
+            </div>
         </form>
       </div>
     )

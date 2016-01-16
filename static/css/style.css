@@ -188,9 +188,50 @@ h1 {
 }
 /* Contact Form */
 #contact-form {
-  color: #165D9A;
+  color: white;
+  font-size: 18px;
+}
+
+#contact-form input{
+  width: 70%;
+  height: 8%;
+
+  background: transparent;
+  outline: none;
+
+  border: none;
+  border-bottom-color: rgba(255, 255, 255, 0.619608);
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+}
+
+#contact-form textarea {
+  width: 70%;
+  height: 50%;
+
+  background: transparent;
+  outline: none;
+
+  border: none;
+  border-bottom-color: rgba(255, 255, 255, 0.619608);
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+}
+
+#contact-form button {
+  margin-top: 20px;
+  margin-left: 25%;
+
+  background-color: #71A3C4;
+  color: white;
+  border: none;
+
+  font-size: 18px;
+
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 #contact-form input:focus, textarea:focus, button:focus {
-  color: red;
+  color: white;
 }
