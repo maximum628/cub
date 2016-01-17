@@ -17,6 +17,12 @@ a {
 
 a:hover {
   color: white;
+  text-decoration: none;
+}
+
+a:focus{
+  color: white;
+  text-decoration: none;
 }
 
 h1 {
@@ -146,6 +152,7 @@ h1 {
 #progress-bar {
   clear: left;
   width: 100%;
+  height: 20px;
   background-color: rgba(255, 255, 255, 0.3);
 }
 
@@ -159,6 +166,33 @@ h1 {
   border-right: solid rgba(255, 255, 255, 0.3) 1px;
   text-align: right;
 }
+
+.stats-metric {
+  width: 33%;
+  height: 300px;
+  float: left;
+  text-align: center;
+  padding-top: 50px;
+}
+
+.stats-metric-title {
+  font-weight: 300;
+  font-size: 18px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.stats-metric-no {
+  font-size: 58px;
+  line-height: 60px;
+  margin: 0px;
+}
+
+.stats-metric-info {
+  font-size: 16px;
+  margin: 0px;
+}
+
 
 /* Repos Paginate */
 .pagination-pages li {
