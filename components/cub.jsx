@@ -445,9 +445,11 @@ var ContactPage = React.createClass({
               <input type="text" value={this.state.fullName} placeholder='Full name' onChange={this.handleNameChange}/>
               <input type="email" value={this.state.email} placeholder='Email' onChange={this.handleEmailChange}/>
             </div>
-              <textarea value={this.state.content} placeholder='Your message' onChange={this.handleContentChange}/>
             <div className="form-group">
-              <button id="contact-form__submit" className="btn btn-primary" onClick={this.handleSubmit}> Send </button>
+              <textarea value={this.state.content} placeholder='Your message' onChange={this.handleContentChange}/>
+            </div>
+            <div className="form-group">
+              <a href='' id="contact-form__submit" onClick={this.handleSubmit}> Send </a>
             </div>
         </form>
       </div>
@@ -475,7 +477,7 @@ var IndexPage = React.createClass({
       <div>
         <Nav />
         <div id="intro">
-          <div id="intro-top">Open Source Hub</div>
+          <div id="intro-top">Open Source Connect Hub</div>
           <div id="intro-body">CUB</div>
           <div id="intro-bottom">
             { this.render_links() }
