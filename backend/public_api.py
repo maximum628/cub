@@ -2,8 +2,10 @@ from tastypie import fields
 from tastypie.constants import ALL
 from tastypie.paginator import Paginator
 from tastypie.resources import ModelResource
+from tastypie.validation import FormValidation
 from tastypie_mongoengine import resources
 
+from backend.forms import ContactForm
 from backend.models import Account, Contact, Repository
 from backend.authorization import ContactAuthorization
 
@@ -22,6 +24,7 @@ class ContactResource(resources.MongoEngineResource):
         queryset = Contact.objects.all()
         allowed_methods = ['post']
         authorization = ContactAuthorization()
+        validation = FormValidation(form_class=ContactForm)
 
 
 class RepositoryResource(resources.MongoEngineResource):

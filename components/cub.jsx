@@ -1,11 +1,12 @@
 var React    = require('react');
 var ReactDOM = require('react-dom');
 
+var Formsy   = require('formsy-react');
 var History  = require('history');
+var Link     = require('react-router').Link;
 var Router   = require('react-router').Router;
 var Route    = require('react-router').Route;
 var Redirect = require('react-router').Redirect;
-var Link     = require('react-router').Link;
 var ReactPaginate = require('react-paginate');
 
 const history = History.createHistory();
@@ -391,30 +392,91 @@ var RepoPage = React.createClass({
 })
 
 
+var FullNameInput = React.createClass({
+   mixins: [Formsy.Mixin],
+
+   changeValue: function (event) {
+     this.setValue(event.currentTarget.value);
+   },
+   render: function () {
+     var className = this.showRequired() ? 'required' : this.showError() ? 'error' : null;
+
+     var errorMessage = this.getErrorMessage();
+
+     return (
+       <div className={className}>
+         <input type="text" onChange={this.changeValue} value={this.getValue()} placeholder="Full Name"/>
+         <span>{errorMessage}</span>
+       </div>
+     );
+   }
+ })
+
+ var EmailInput = React.createClass({
+    mixins: [Formsy.Mixin],
+
+    changeValue: function (event) {
+      this.setValue(event.currentTarget.value);
+    },
+    render: function () {
+      var className = this.showRequired() ? 'required' : this.showError() ? 'error' : null;
+
+      var errorMessage = this.getErrorMessage();
+
+      return (
+        <div className={className}>
+          <input type="email" onChange={this.changeValue} value={this.getValue()} placeholder="Email"/>
+          <span>{errorMessage}</span>
+        </div>
+      );
+    }
+  })
+
+ var ContentTextarea = React.createClass({
+    mixins: [Formsy.Mixin],
+
+    changeValue: function (event) {
+      this.setValue(event.currentTarget.value);
+    },
+    render: function () {
+      var className = this.showRequired() ? 'required' : this.showError() ? 'error' : null;
+
+      var errorMessage = this.getErrorMessage();
+
+      return (
+        <div className={className}>
+          <textarea onChange={this.changeValue} value={this.getValue()} placeholder="Your message to us"/>
+          <span>{errorMessage}</span>
+        </div>
+      );
+    }
+  })
+
 var ContactPage = React.createClass({
 
   getInitialState: function() {
     return {
+      canSubmit: null
     };
   },
 
-  handleNameChange: function(event) {
-    this.setState({fullName: event.target.value});
+  enableButton: function () {
+    this.setState({
+      canSubmit: true
+    });
   },
 
-  handleEmailChange: function(event) {
-    this.setState({email: event.target.value});
+  disableButton: function () {
+    this.setState({
+      canSubmit: false
+    });
   },
 
-  handleContentChange: function(event) {
-    this.setState({content: event.target.value});
-  },
-
-  handleSubmit: function(event) {
+  handleSubmit: function(data) {
     var data = JSON.stringify({
-      name: this.state.fullName,
-      email: this.state.email,
-      content: this.state.content
+      name: data.fullName,
+      email: data.email,
+      content: data.content
     });
 
     $.ajaxSetup({
@@ -439,19 +501,19 @@ var ContactPage = React.createClass({
     return (
       <div>
         <Nav />
-        <form className="col-md-6 col-md-offset-3" id="contact-form">
+        <Formsy.Form onValidSubmit={this.handleSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="col-md-6 col-md-offset-3" id="contact-form">
           <h1>Get in touch with us</h1>
             <div className="form-group">
-              <input type="text" value={this.state.fullName} placeholder='Full name' onChange={this.handleNameChange}/>
-              <input type="email" value={this.state.email} placeholder='Email' onChange={this.handleEmailChange}/>
+              <FullNameInput name="fullName" validationError="Name is required" required/>
+              <EmailInput name="email" validations="isEmail" validationError="A valid email is required" required/>
             </div>
             <div className="form-group">
-              <textarea value={this.state.content} placeholder='Your message' onChange={this.handleContentChange}/>
+              <ContentTextarea name="content" validationError="Message is required" required/>
             </div>
             <div className="form-group">
-              <a href='' id="contact-form__submit" onClick={this.handleSubmit}> Send </a>
+              <button type="submit" id="contact-form__submit" disabled={!this.state.canSubmit}> Send </button>
             </div>
-        </form>
+        </Formsy.Form>
         <Footer />
       </div>
     )

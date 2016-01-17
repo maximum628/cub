@@ -257,12 +257,22 @@ h1 {
   border-bottom-width: thin;
 }
 
-#contact-form__submit{
+#contact-form__submit {
   margin-left: 25%;
   color: white;
   font-size: 19px;
   padding: 5px 15px 5px 15px;
-  border: solid white 2px;
+  border: none;
+  background: none;
+  text-decoration: none;
+}
+
+#contact-form__submit:disabled {
+  margin-left: 25%;
+  color: grey;
+  font-size: 19px;
+  padding: 5px 15px 5px 15px;
+  border: none;
   text-decoration: none;
 }
 
