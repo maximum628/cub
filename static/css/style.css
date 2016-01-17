@@ -269,3 +269,11 @@ h1 {
 #contact-form input:focus, textarea:focus, button:focus {
   color: white;
 }
+
+
+footer {
+  bottom: 0;
+  position: absolute;
+  text-align: center;
+  margin-left: 11%;
+}

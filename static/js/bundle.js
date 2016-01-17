@@ -497,7 +497,8 @@
 	            React.createElement("div", {className: "form-group"}, 
 	              React.createElement("a", {href: "", id: "contact-form__submit", onClick: this.handleSubmit}, " Send ")
 	            )
-	        )
+	        ), 
+	        React.createElement(Footer, null)
 	      )
 	    )
 	  }
@@ -547,7 +548,24 @@
 	    return (
 	      React.createElement("div", null, 
 	        React.createElement(Nav, null), 
-	        React.createElement("h1", null, "404: Page not found")
+	        React.createElement("h1", null, "404: Page not found"), 
+	        React.createElement(Footer, null)
+	      )
+	    )
+	  }
+	})
+
+
+
+	var Footer = React.createClass({displayName: "Footer",
+	  render: function() {
+	    return (
+	      React.createElement("footer", null, 
+	        React.createElement("ul", {className: "list-inline"}, 
+	          React.createElement("li", null, " ", React.createElement("a", {href: "https://www.google.ro/maps/place/Bucure%C8%99ti/@44.4377401,25.9545542,11z/data=!3m1!4b1!4m2!3m1!1s0x40b1f93abf3cad4f:0xac0632e37c9ca628?hl=ro", target: "_blank"}, " Hacked with ", React.createElement("span", {className: "glyphicon glyphicon-heart", "aria-hidden": "true"}), " in Bucharest, RO"), " | "), 
+	          React.createElement("li", null, " ", React.createElement("a", {href: "https://github.com/maria/cub", target: "_blank"}, " GitHub repository "), " | "), 
+	          React.createElement("li", null, " ", React.createElement("a", {href: "https://unsplash.com/photos/6g0KJWnBhxg", target: "_blank"}, " Background via Unsplash "))
+	        )
 	      )
 	    )
 	  }
