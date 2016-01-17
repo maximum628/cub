@@ -406,7 +406,7 @@ var FullNameInput = React.createClass({
      return (
        <div className={className}>
          <input type="text" onChange={this.changeValue} value={this.getValue()} placeholder="Full Name"/>
-         <span>{errorMessage}</span>
+         <span className="form-error">{errorMessage}</span>
        </div>
      );
    }
@@ -426,7 +426,7 @@ var FullNameInput = React.createClass({
       return (
         <div className={className}>
           <input type="email" onChange={this.changeValue} value={this.getValue()} placeholder="Email"/>
-          <span>{errorMessage}</span>
+          <span className="form-error">{errorMessage}</span>
         </div>
       );
     }
@@ -446,7 +446,7 @@ var FullNameInput = React.createClass({
       return (
         <div className={className}>
           <textarea onChange={this.changeValue} value={this.getValue()} placeholder="Your message to us"/>
-          <span>{errorMessage}</span>
+          <span className="form-error">{errorMessage}</span>
         </div>
       );
     }

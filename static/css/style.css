@@ -280,6 +280,10 @@ h1 {
   color: white;
 }
 
+#contact-form .form-error {
+  font-size: 11px;
+  color: grey;
+}
 
 footer {
   bottom: 0;

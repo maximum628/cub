@@ -452,7 +452,7 @@
 	     return (
 	       React.createElement("div", {className: className}, 
 	         React.createElement("input", {type: "text", onChange: this.changeValue, value: this.getValue(), placeholder: "Full Name"}), 
-	         React.createElement("span", null, errorMessage)
+	         React.createElement("span", {className: "form-error"}, errorMessage)
 	       )
 	     );
 	   }
@@ -472,7 +472,7 @@
 	      return (
 	        React.createElement("div", {className: className}, 
 	          React.createElement("input", {type: "email", onChange: this.changeValue, value: this.getValue(), placeholder: "Email"}), 
-	          React.createElement("span", null, errorMessage)
+	          React.createElement("span", {className: "form-error"}, errorMessage)
 	        )
 	      );
 	    }
@@ -492,7 +492,7 @@
 	      return (
 	        React.createElement("div", {className: className}, 
 	          React.createElement("textarea", {onChange: this.changeValue, value: this.getValue(), placeholder: "Your message to us"}), 
-	          React.createElement("span", null, errorMessage)
+	          React.createElement("span", {className: "form-error"}, errorMessage)
 	        )
 	      );
 	    }
