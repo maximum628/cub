@@ -236,7 +236,7 @@ class Contact(AbstractJSONDocument):
             message='We confirm we received your feedback message.',
             html_message=msg_html,
             from_email='Connect Hub - CUB <%s>' % EMAIL_HOST_USER,
-            recipient_list=document.email,
+            recipient_list=[document.email],
             fail_silently=True)
 
 mongoengine.signals.post_save.connect(Contact.send_email, sender=Contact)
