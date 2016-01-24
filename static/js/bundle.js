@@ -502,7 +502,7 @@
 
 	  getInitialState: function() {
 	    return {
-	      canSubmit: null
+	      canSubmit: false
 	    };
 	  },
 
@@ -516,6 +516,10 @@
 	    this.setState({
 	      canSubmit: false
 	    });
+	  },
+
+	  resetForm() {
+	    this.refs.form.reset();
 	  },
 
 	  handleSubmit: function(data) {
@@ -538,6 +542,7 @@
 	       data: data,
 	     })
 	     .done(function(data) {
+	       this.resetForm;
 	     })
 	     .fail(function(jqXhr) {
 	     });
@@ -547,7 +552,7 @@
 	    return (
 	      React.createElement("div", null, 
 	        React.createElement(Nav, null), 
-	        React.createElement(Formsy.Form, {onValidSubmit: this.handleSubmit, onValid: this.enableButton, onInvalid: this.disableButton, className: "col-md-6 col-md-offset-3", id: "contact-form"}, 
+	        React.createElement(Formsy.Form, {ref: "form", onValidSubmit: this.handleSubmit, onValid: this.enableButton, onInvalid: this.disableButton, className: "col-md-6 col-md-offset-3 form", id: "contact-form"}, 
 	          React.createElement("h1", null, "Get in touch with us"), 
 	            React.createElement("div", {className: "form-group"}, 
 	              React.createElement(FullNameInput, {name: "fullName", validationError: "Name is required", required: true}), 
@@ -557,7 +562,7 @@
 	              React.createElement(ContentTextarea, {name: "content", validationError: "Message is required", required: true})
 	            ), 
 	            React.createElement("div", {className: "form-group"}, 
-	              React.createElement("button", {type: "submit", id: "contact-form__submit", disabled: !this.state.canSubmit}, " Send ")
+	              React.createElement("a", {href: "", className: "contact-form__submit"}, React.createElement("button", {type: "submit", disabled: !this.state.canSubmit}, "Send"))
 	            )
 	        ), 
 	        React.createElement(Footer, null)

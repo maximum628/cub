@@ -257,7 +257,7 @@ h1 {
   border-bottom-width: thin;
 }
 
-#contact-form__submit {
+.contact-form__submit button{
   margin-left: 25%;
   color: white;
   font-size: 19px;
@@ -267,16 +267,11 @@ h1 {
   text-decoration: none;
 }
 
-#contact-form__submit:disabled {
-  margin-left: 25%;
+.contact-form__submit button:disabled{
   color: grey;
-  font-size: 19px;
-  padding: 5px 15px 5px 15px;
-  border: none;
-  text-decoration: none;
 }
 
-#contact-form input:focus, textarea:focus, button:focus {
+#contact-form input:focus, textarea:focus{
   color: white;
 }
 

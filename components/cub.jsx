@@ -456,7 +456,7 @@ var ContactPage = React.createClass({
 
   getInitialState: function() {
     return {
-      canSubmit: null
+      canSubmit: false
     };
   },
 
@@ -470,6 +470,10 @@ var ContactPage = React.createClass({
     this.setState({
       canSubmit: false
     });
+  },
+
+  resetForm() {
+    this.refs.form.reset();
   },
 
   handleSubmit: function(data) {
@@ -492,6 +496,7 @@ var ContactPage = React.createClass({
        data: data,
      })
      .done(function(data) {
+       this.resetForm();
      })
      .fail(function(jqXhr) {
      });
@@ -501,7 +506,7 @@ var ContactPage = React.createClass({
     return (
       <div>
         <Nav />
-        <Formsy.Form onValidSubmit={this.handleSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="col-md-6 col-md-offset-3" id="contact-form">
+        <Formsy.Form ref="form" onValidSubmit={this.handleSubmit} onValid={this.enableButton} onInvalid={this.disableButton} className="col-md-6 col-md-offset-3 form" id="contact-form">
           <h1>Get in touch with us</h1>
             <div className="form-group">
               <FullNameInput name="fullName" validationError="Name is required" required/>
@@ -511,7 +516,7 @@ var ContactPage = React.createClass({
               <ContentTextarea name="content" validationError="Message is required" required/>
             </div>
             <div className="form-group">
-              <button type="submit" id="contact-form__submit" disabled={!this.state.canSubmit}> Send </button>
+              <a href='' className="contact-form__submit"><button type="submit" disabled={!this.state.canSubmit}>Send</button></a>
             </div>
         </Formsy.Form>
         <Footer />
