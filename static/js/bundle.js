@@ -521,6 +521,7 @@
 
 	  resetForm: function() {
 	    this.refs.form.reset();
+	    this.refs.form.inputs.emailContent.setValue('');
 	  },
 
 	  handleSubmit: function(data) {
