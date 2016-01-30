@@ -8,6 +8,7 @@ var Router   = require('react-router').Router;
 var Route    = require('react-router').Route;
 var Redirect = require('react-router').Redirect;
 var ReactPaginate = require('react-paginate');
+var Textarea = require('react-textarea-autosize');
 
 const history = History.createHistory();
 const per_page = 10;
@@ -445,7 +446,7 @@ var FullNameInput = React.createClass({
 
       return (
         <div className={className}>
-          <textarea onChange={this.changeValue} value={this.getValue()} placeholder="Your message to us"/>
+          <Textarea onChange={this.changeValue} value={this.getValue()} placeholder="Your message to us"></Textarea>
           <span className="form-error">{errorMessage}</span>
         </div>
       );
@@ -472,7 +473,7 @@ var ContactPage = React.createClass({
     });
   },
 
-  resetForm() {
+  resetForm: function() {
     this.refs.form.reset();
   },
 
@@ -480,7 +481,7 @@ var ContactPage = React.createClass({
     var data = JSON.stringify({
       name: data.fullName,
       email: data.email,
-      content: data.content
+      content: data.emailContent
     });
 
     $.ajaxSetup({
@@ -494,12 +495,10 @@ var ContactPage = React.createClass({
        type: 'POST',
        url: '/api/public/contact/',
        data: data,
-     })
-     .done(function(data) {
-       this.resetForm();
-     })
-     .fail(function(jqXhr) {
-     });
+       success: function(data) { this.resetForm() }.bind(this),
+       error: function(error) { }
+   });
+
   },
 
   render: function() {
@@ -513,7 +512,7 @@ var ContactPage = React.createClass({
               <EmailInput name="email" validations="isEmail" validationError="A valid email is required" required/>
             </div>
             <div className="form-group">
-              <ContentTextarea name="content" validationError="Message is required" required/>
+              <ContentTextarea name="emailContent" validationError="Message is required" required/>
             </div>
             <div className="form-group">
               <a href='' className="contact-form__submit"><button type="submit" disabled={!this.state.canSubmit}>Send</button></a>

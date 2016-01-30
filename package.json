@@ -11,6 +11,7 @@
     "react-dom": "^0.14.2",
     "react-paginate": "^0.5.0",
     "react-router": "^1.0.2",
+    "react-textarea-autosize": "^3.3.0",
     "webpack": "^1.12.4",
     "webpack-dev-server": "^1.12.1"
   },
