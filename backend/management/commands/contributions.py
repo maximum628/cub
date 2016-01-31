@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 
-from backend.models import Account
+from backend.models.account import Account
 from backend.tasks import get_all_contributions
 
 class Command(BaseCommand):
