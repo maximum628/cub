@@ -11,3 +11,4 @@ https://github.com/maria/PyGithub/tarball/add-oauth-authentication
 blinker
 # Needed to keep wsgi for dev and prod in one place
 dj_static
+Celery
