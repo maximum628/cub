@@ -1,7 +1,7 @@
 import time
 
 from backend.contribution import get_repos, get_pulls, get_score, delete_repos
-from backend.models import Account
+from backend.models.account import Account
 from cub.settings import CONTRIB_DELTA
 
 

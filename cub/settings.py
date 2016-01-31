@@ -22,7 +22,7 @@ APP_ENVIRONMENT = os.environ.get('APP_ENVIRONMENT', 'DEV')
 if APP_ENVIRONMENT == 'DEV':
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = 'bu0-nf-yu99^$7!8z$#uiz22v6y&3-#i35&f3!s7e+u3ocs*3m'
-    ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', '192.168.3.3']
+    ALLOWED_HOSTS = ['*']
     DEBUG = True
     STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
@@ -44,7 +44,7 @@ if APP_ENVIRONMENT == 'DEV':
 elif APP_ENVIRONMENT == 'PROD':
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ['connecthub.herokuapp.com', 'connecthub.herokuapp.com.']
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     CSRF_COOKIE_SECURE = True
