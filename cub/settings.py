@@ -44,7 +44,7 @@ if APP_ENVIRONMENT == 'DEV':
 elif APP_ENVIRONMENT == 'PROD':
     SECRET_KEY = os.environ.get('SECRET_KEY')
 
-    ALLOWED_HOSTS = ['connecthub.herokuapp.com.']
+    ALLOWED_HOSTS = ['connecthub.herokuapp.com', 'connecthub.herokuapp.com.']
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     CSRF_COOKIE_SECURE = True
