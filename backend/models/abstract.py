@@ -19,7 +19,7 @@ class AbstractJSONDocument(mongoengine.Document):
         """ Modify a document by a given dictionary / json """
         for key, value in data.iteritems():
             setattr(self, key, value)
-        document = self.update()
+        document = self.save()
         return document
 
 

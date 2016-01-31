@@ -1,5 +1,7 @@
 import mongoengine
 
+from backend.models.repository import Repository
+
 
 class Score(mongoengine.Document):
 
