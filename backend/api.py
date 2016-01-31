@@ -32,16 +32,32 @@ class AccountResource(ModelResource):
         authorization = MyAccountOnlyAuthorization()
 
     def dehydrate_forks_count(self, bundle):
-        return Score.objects.get(cub_account=bundle.obj.username).forks_count
+        try:
+            score = Score.objects.get(cub_account=bundle.obj.username).forks_count
+        except:
+            score = 0
+        return score
 
     def dehydrate_stargazers_count(self, bundle):
-        return Score.objects.get(cub_account=bundle.obj.username).stargazers_count
+        try:
+            score = Score.objects.get(cub_account=bundle.obj.username).stargazers_count
+        except:
+            score = 0
+        return score
 
     def dehydrate_watchers_count(self, bundle):
-        return Score.objects.get(cub_account=bundle.obj.username).watchers_count
+        try:
+            score = Score.objects.get(cub_account=bundle.obj.username).watchers_count
+        except:
+            score = 0
+        return score
 
     def dehydrate_pulls_count(self, bundle):
-        return PRContribution.objects.filter(cub_account=bundle.obj.username).count()
+        try:
+            score = PRContribution.objects.filter(cub_account=bundle.obj.username).count()
+        except:
+            score = 0
+        return score
 
 
 class CommitContributionResource(resources.MongoEngineResource):
