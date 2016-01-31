@@ -147,45 +147,42 @@ var ProfileStats = React.createClass({
       repos_score: null,
       repos_top_name: null,
       repos_top_score: null,
-      progress: 0
+      progress: 0,
+      login_message: null
     }
   },
 
   componentDidMount: function() {
     if (typeof username === 'undefined') {
       if (typeof this.props.username === 'undefined') {
-        // User not authenticated, looking at nothing
+        // User not authenticated, looking at default page
         // Show demo data
         this.setState({
           repos_count: '###',
           repos_score: '###',
           repos_top_name: '###',
           repos_top_score: '__',
-          progress: 15
+          progress: 15,
+          login_message: 'You need to login to see your own metrics.'
         });
 
       } else {
         // User is not authenticated, looking at someone
         // Show some real data
         this.setState({
-          repos_count: null,
-          repos_score: null,
-          repos_top_name: null,
-          repos_top_score: null,
-          progress: 0
+          repos_count: '###',
+          repos_score: '###',
+          repos_top_name: '###',
+          repos_top_score: '__',
+          progress: 0,
+          login_message: 'You need to login to see more metrics.'
         });
       }
 
     } else {
       if (typeof this.props.username === 'undefined') {
-        // User is authenticated, looking at nothing
-        this.setState({
-          repos_count: null,
-          repos_score: null,
-          repos_top_name: null,
-          repos_top_score: null,
-          progress: 0
-        });
+        // User is authenticated, looking at default page
+        this.setState(this.state);
 
       } else if (this.props.username == username) {
         // User is authenticated, looking at own profile
@@ -262,6 +259,11 @@ var ProfileStats = React.createClass({
           <div className="stats-metric-no">{this.state.repos_count}</div>
           <div className="stats-metric-info">repositories</div>
         </div>
+
+        { this.state.login_message ?
+          <div className="stats-login-msg">
+            <a href='/authorize/'>{this.state.login_message}</a>
+          </div> : ''}
       </div>
     );
   }
@@ -279,49 +281,79 @@ var Profile = React.createClass({
   },
 
   componentDidMount: function() {
+    if (typeof username === 'undefined') {
+      if (typeof this.props.username === 'undefined') {
+        // User not authenticated, looking at default page
+        // Show demo data
+        this.setState({
+          avatar_url : 'http://bestmarketinfo.com/images/blank-avatar.png',
+          name       : 'Your name',
+          username   : 'username',
+          email      : 'username@cub.com',
+        });
 
-    // Show demo profile
-    if (typeof this.props.username === 'undefined') {
-      this.setState({
-        avatar_url : 'http://bestmarketinfo.com/images/blank-avatar.png',
-        name       : 'Your name',
-        username   : 'username',
-        email      : 'username@cub.com',
-      });
-    }
+      } else {
+        // User is not authenticated, looking at someone
+        // Show some real data
+        var url = '/api/public/account/?username=' + this.props.username;
 
-    // User is viewing his own profile
-    else if (typeof username !== 'undefined' && this.props.username == username) {
-      $.get('/api/v1/account/', function(res) {
-        if (this.isMounted()) {
-          this.setState({
-            avatar_url : res.objects[0].avatar_url,
-            name       : res.objects[0].username,
-            username   : res.objects[0].login,
-            email      : res.objects[0].email
-          });
+        $.get(url, function(res) {
+          if (this.isMounted()) {
+            this.setState({
+              avatar_url : res.objects[0].avatar_url,
+              name       : res.objects[0].name,
+              username   : res.objects[0].username
+            });
+          }
         }
-      }.bind(this));
-
-    // User is viewing other user's profile
-    } else {
-      $.get('/api/v1/account/?username=' + this.props.username, function(res) {
-        if (this.isMounted()) {
-          this.setState({
-            avatar_url : res.objects[0].avatar_url,
-            name       : res.objects[0].name,
-            username   : res.objects[0].username,
-            email      : res.objects[0].email
-          });
-        }
+        .bind(this))
+        .fail(function(err) {
+          if (err.status == 400 ) {
+            // User not found, redirect to 404 page
+            window.location.href = "/404/";
+          }
+        });
       }
-      .bind(this))
-      .fail(function(err) {
-        if (err.status == 400 ) {
-          // User not found, redirect to 404 page
-          window.location.href = "/404/";
+
+    } else {
+      if (typeof this.props.username === 'undefined') {
+        // User is authenticated, looking at default page
+        // Redirect to own profile
+        window.location.href = '/profile/' + username;
+
+      } else if (this.props.username == username) {
+        // User is authenticated, looking at own profile
+        $.get('/api/v1/account/', function(res) {
+          if (this.isMounted()) {
+            this.setState({
+              avatar_url : res.objects[0].avatar_url,
+              name       : res.objects[0].name,
+              username   : res.objects[0].username,
+              email      : res.objects[0].email
+            });
+          }
+        }.bind(this));
+
+      } else {
+        // User is authenticated, looking at someone
+        $.get('/api/v1/account/?username=' + this.props.username, function(res) {
+          if (this.isMounted()) {
+            this.setState({
+              avatar_url : res.objects[0].avatar_url,
+              name       : res.objects[0].name,
+              username   : res.objects[0].username,
+              email      : res.objects[0].email
+            });
+          }
         }
-      });
+        .bind(this))
+        .fail(function(err) {
+          if (err.status == 400 ) {
+            // User not found, redirect to 404 page
+            window.location.href = "/404/";
+          }
+        });
+      }
     }
   },
 
@@ -540,6 +572,15 @@ var ProfilePage = React.createClass({
 
 
 var IndexPage = React.createClass({
+  statics: {
+    onEnter(next, transition) {
+      // Redirect to profile if user is logged in
+      if (typeof username !== 'undefined') {
+        return transition(null, '/profile/' + username);
+      }
+    },
+  },
+
   render: function() {
     return (
       <div>
@@ -556,6 +597,9 @@ var IndexPage = React.createClass({
   },
 
   render_links: function() {
+    // OBSOLETE, will be removed
+    // User will be redirected to profile page if he is logged in, so we don't
+    // need to show /profile link anymore
     if (typeof user !== 'undefined')
       return (<a href="/profile/" id="intro-login">Profile</a>)
     else
@@ -595,7 +639,7 @@ var Footer = React.createClass({
 
 ReactDOM.render((
   <Router history={history}>
-    <Route path="/" component={IndexPage} />
+    <Route path="/" component={IndexPage} onEnter={IndexPage.onEnter}/>
     <Route path="/profile/" component={ProfilePage} />
     <Route path="/profile/:username" component={ProfilePage} />
     <Route path="/repos/" component={RepoPage} />

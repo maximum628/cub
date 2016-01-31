@@ -40,6 +40,7 @@ if APP_ENVIRONMENT == 'DEV':
         'NAME': 'cub',
         'HOST': 'mongodb://127.0.0.1:27017',
     }
+    CONTRIB_DELTA = 0
 
 elif APP_ENVIRONMENT == 'PROD':
     SECRET_KEY = os.environ.get('SECRET_KEY')
@@ -58,6 +59,8 @@ elif APP_ENVIRONMENT == 'PROD':
         'NAME': 'connecthub',
         'HOST': os.environ.get('MONGOLAB_URI'),
     }
+
+    CONTRIB_DELTA = 600
 
 WSGI_APPLICATION = 'cub.wsgi.application'
 # General settings
@@ -141,8 +144,6 @@ STATICFILES_FINDERS = (
 STATIC_URL = '/static/'
 
 TASTYPIE_DEFAULT_FORMATS = ['json']
-
-CONTRIB_DELTA = 600
 
 EMAIL_USE_TLS = True
 EMAIL_HOST = os.environ.get('MAILGUN_SMTP_SERVER')
