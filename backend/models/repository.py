@@ -27,24 +27,40 @@ class Repository(AbstractJSONDocument):
 
     @classmethod
     def save_or_update(cls, raw_data, account):
-        data = Repository.transform(raw_data)
-        data['cub_account'] = account
-
-        if Repository.objects(
-                cub_account=account, html_url=data['html_url']):
-
+        try:
             repo = Repository.objects.get(
                     cub_account=account, html_url=data['html_url'])
-            repo = repo.update_document(data)
 
-        else:
+        except DoesNotExist:
+            data = Repository.transform(account, raw_data)
             repo = Repository.save_document(data)
+            return repo
 
+        except MultipleObjectsReturned:
+            # should log the exception as a db inconsistency
+            repo = Repository.objects.filter(
+                    cub_account=account, html_url=data['html_url'])[0]
+
+        if repo.updated_at >= raw_data['updated_at']
+            return repo
+
+        data = Repository.transform(account, raw_data)
+        repo = repo.update_document(data)
         return repo
 
     @classmethod
-    def transform(cls, raw_data):
+    def transform(cls, account, raw_data):
+
+        if raw_data['owner']['type'] == 'User':
+            if raw_data['owner']['login'] != account.username:
+                raw_data['affiliation'] = 'collaborator'
+            else:
+                raw_data['affiliation'] = 'owner'
+        else:
+            raw_data['affiliation'] = 'organization_member'
+
         data = {
+            'cub_account': account,
             'name': raw_data['name'],
             'description': raw_data['description'],
             'html_url': raw_data['html_url'],
