@@ -1,6 +1,8 @@
 from github import Github
 
-from backend.models import Repository, PRContribution, Score
+from backend.models.contribution import CommitContribution, PRContribution
+from backend.models.repository import Repository
+from backend.models.score import  Score
 
 
 def get_repos(account_github_token, account_username):
@@ -17,7 +19,7 @@ def get_repos(account_github_token, account_username):
         else:
             repo.raw_data['affiliation'] = 'organization_member'
 
-        Repository.create_or_update(repo.raw_data, account_username)
+        Repository.save_or_update(repo.raw_data, account_username)
 
 
 def delete_repos(account_github_token, account_username):
@@ -44,7 +46,7 @@ def get_pulls(account_github_token, account_username):
         query='', sort='updated', order='desc', **qualifiers)
 
     for pull in pulls:
-        PRContribution.create_or_update(pull.raw_data, account_username)
+        PRContribution.save_or_update(pull.raw_data, account_username)
 
 
 def get_commits(account_username):
