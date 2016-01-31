@@ -1,3 +1,4 @@
+import arrow
 import mongoengine
 
 from backend.models.abstract import AbstractJSONDocument
@@ -29,19 +30,20 @@ class Repository(AbstractJSONDocument):
     def save_or_update(cls, raw_data, account):
         try:
             repo = Repository.objects.get(
-                    cub_account=account, html_url=data['html_url'])
+                    cub_account=account, html_url=raw_data['html_url'])
 
-        except DoesNotExist:
+        except mongoengine.DoesNotExist:
             data = Repository.transform(account, raw_data)
             repo = Repository.save_document(data)
             return repo
 
-        except MultipleObjectsReturned:
+        except mongoengine.MultipleObjectsReturned:
             # should log the exception as a db inconsistency
             repo = Repository.objects.filter(
-                    cub_account=account, html_url=data['html_url'])[0]
+                    cub_account=account, html_url=raw_data['html_url'])[0]
 
-        if repo.updated_at >= raw_data['updated_at']
+        if (arrow.get(repo.updated_at) >=
+                arrow.get(raw_data['updated_at'], 'YYYY-MM-DDTHH:mm:ss')):
             return repo
 
         data = Repository.transform(account, raw_data)
@@ -52,7 +54,7 @@ class Repository(AbstractJSONDocument):
     def transform(cls, account, raw_data):
 
         if raw_data['owner']['type'] == 'User':
-            if raw_data['owner']['login'] != account.username:
+            if raw_data['owner']['login'] != account:
                 raw_data['affiliation'] = 'collaborator'
             else:
                 raw_data['affiliation'] = 'owner'
