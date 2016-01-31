@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import View, TemplateView
 
 from backend.helpers import get_github_user_info
-from backend.models import Account
+from backend.models.account import Account
 from backend.oauth_github import ConnectGitHub
 from backend.tasks import get_all_contributions
 

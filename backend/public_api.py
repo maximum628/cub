@@ -4,8 +4,11 @@ from tastypie.paginator import Paginator
 from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
-from backend.models import Account, Contact, Repository
+from backend.models.account import Account
+from backend.models.contact import  Contact
+from backend.models.repository import Repository
 from backend.authorization import ContactAuthorization
+
 
 class AccountResource(ModelResource):
     class Meta:

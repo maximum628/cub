@@ -7,8 +7,10 @@ from tastypie.resources import ModelResource
 from tastypie_mongoengine import resources
 
 from backend.contribution import get_repos, get_pulls, get_score, get_commits
-from backend.models import (Account, CommitContribution, PRContribution,
-    Repository, Score)
+from backend.models.account import Account
+from backend.models.contribution import CommitContribution, PRContribution
+from backend.models.repository import Repository
+from backend.models.score import  Score
 
 from backend.authorization import (MyAccountOnlyAuthorization,
     AccountObjectsOnlyAuthorization)
