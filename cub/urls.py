@@ -11,6 +11,7 @@ from backend.views import (AuthorizeGitHubURL, AuthenticateGitHubAccount,
 
 v1_api = Api(api_name='v1')
 v1_api.register(api.AccountResource())
+v1_api.register(api.MyAccountResource())
 v1_api.register(api.CommitContributionResource())
 v1_api.register(api.PRContributionResource())
 v1_api.register(api.RepositoryResource())
