@@ -1,13 +1,15 @@
-Django==1.8.6
-bcrypt==2.0.0
 arrow==0.7.0
-pycrypto==2.6.1
-pymongo==3.1.1
-mongoengine==0.10.1
+bcrypt==2.0.0
+blinker==1.4
+celery==3.1.20
+Django==1.8.6
+django.js==0.8.1
 django-tastypie==0.12.2
 django-tastypie-mongoengine==0.4.6
-django.js
-https://github.com/maria/PyGithub/tarball/add-oauth-authentication
-blinker
+mongoengine==0.10.1
+pycrypto==2.6.1
+pymongo==3.1.1
 # Needed to keep wsgi for dev and prod in one place
 dj_static
+# Custom
+https://github.com/maria/PyGithub/tarball/add-oauth-authentication

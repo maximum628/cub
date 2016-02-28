@@ -52,5 +52,5 @@ class Contributions(View):
 
     def get(self, request):
         account = Account.objects.get(username=request.user.username)
-        get_all_contributions(account)
+        get_all_contributions.delay(account)
         return redirect('/')

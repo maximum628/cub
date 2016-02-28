@@ -9,16 +9,8 @@ def get_repos(account_github_token, account_username):
     """Save account public repositories data. """
     connection = Github(login_or_token=account_github_token, api_preview=True)
     repos = connection.get_user().get_repos()
+
     for repo in repos:
-
-        if repo.raw_data['owner']['type'] == 'User':
-            if repo.raw_data['owner']['login'] != account_username:
-                repo.raw_data['affiliation'] = 'collaborator'
-            else:
-                repo.raw_data['affiliation'] = 'owner'
-        else:
-            repo.raw_data['affiliation'] = 'organization_member'
-
         Repository.save_or_update(repo.raw_data, account_username)
 
 
@@ -27,14 +19,19 @@ def delete_repos(account_github_token, account_username):
     connection = Github(login_or_token=account_github_token, api_preview=True)
 
     github_repos = connection.get_user().get_repos()
-    database_repos = Repository.objects.filter(cub_account=account_username).only('name')
 
-    gh_repos = [r.raw_data['name'] for r in github_repos]
-    db_repos = [r.name for r in database_repos]
+    gh_repos = set([r.raw_data['name'] for r in github_repos])
+    db_repos = set(Repository.objects.filter(
+            cub_account=account_username).values_list('name'))
 
-    for db_repo in db_repos:
-        if db_repo not in gh_repos:
-            Repository.objects.get(name=db_repo).delete()
+    # Perform a set differrence - to keep a set with the names of old repos
+    repos_to_delete = db_repos - gh_repos
+    if not repos_to_delete:
+        return
+    # If there are repos in the database but not on GitHub then delete them
+    # from the database
+    for db_repo in repos_to_delete:
+        Repository.objects.get(name=db_repo).delete()
 
 
 def get_pulls(account_github_token, account_username):
