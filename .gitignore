@@ -7,3 +7,5 @@ Makefile
 
 node_modules
 cub/static/admin
+
+static/js/bundle.js

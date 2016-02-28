@@ -16,20 +16,11 @@ from backend.authorization import (MyAccountOnlyAuthorization,
     AccountObjectsOnlyAuthorization)
 
 
-class AccountResource(ModelResource):
+class BaseAccountResource(ModelResource):
     forks_count = fields.IntegerField()
     stargazers_count = fields.IntegerField()
     watchers_count = fields.IntegerField()
     pulls_count = fields.IntegerField()
-
-
-    class Meta:
-        queryset = Account.objects.all()
-        excludes = ['id', 'password', 'first_name', 'last_name',
-                    'is_active', 'is_staff', 'is_superuser']
-        allowed_methods = ['get']
-        authentication = SessionAuthentication()
-        authorization = MyAccountOnlyAuthorization()
 
     def dehydrate_forks_count(self, bundle):
         try:
@@ -58,6 +49,31 @@ class AccountResource(ModelResource):
         except:
             score = 0
         return score
+
+
+class AccountResource(BaseAccountResource):
+    """ All accounts resources, available if a user is signed in, lists all
+        details for an account.
+    """
+
+    class Meta:
+        queryset = Account.objects.all()
+        excludes = ['id', 'github_token', 'password', 'is_active', 'is_staff',
+                    'is_superuser', 'first_name', 'last_name', 'synced', 'last_login']
+        filtering = {'username': ALL, 'name': ALL}
+        allowed_methods = ['get']
+        authentication = SessionAuthentication()
+
+
+class MyAccountResource(BaseAccountResource):
+
+    class Meta:
+        queryset = Account.objects.all()
+        excludes = ['id', 'password', 'first_name', 'last_name',
+                    'is_active', 'is_staff', 'is_superuser']
+        allowed_methods = ['get']
+        authentication = SessionAuthentication()
+        authorization = MyAccountOnlyAuthorization()
 
 
 class CommitContributionResource(resources.MongoEngineResource):
@@ -93,6 +109,7 @@ class PRContributionResource(resources.MongoEngineResource):
 class RepositoryResource(resources.MongoEngineResource):
     class Meta:
         queryset = Repository.objects.all()
+        resource_name = 'repository'
         filtering = {'name': ALL, 'affiliation': ALL}
         allowed_methods = ['get', 'post']
         authentication = SessionAuthentication()
