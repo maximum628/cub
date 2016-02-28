@@ -6,12 +6,12 @@ pymongo==3.1.1
 mongoengine==0.10.1
 django-tastypie==0.12.2
 django-tastypie-mongoengine==0.4.6
-https://github.com/maria/PyGithub/tarball/add-oauth-authentication
-blinker
-django.js
+blinker==1.4
+celery==3.1.20
 # Deploy
 gunicorn
 dj-database-url
 dj-static
 psycopg2
-Celery
+# Custom
+https://github.com/maria/PyGithub/tarball/add-oauth-authentication
