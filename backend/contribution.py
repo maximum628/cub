@@ -24,7 +24,12 @@ def delete_repos(account_github_token, account_username):
     db_repos = set(Repository.objects.filter(
             cub_account=account_username).values_list('name'))
 
+    # Perform a set differrence - to keep a set with the names of old repos
     repos_to_delete = db_repos - gh_repos
+    if not repos_to_delete:
+        return
+    # If there are repos in the database but not on GitHub then delete them
+    # from the database
     for db_repo in repos_to_delete:
         Repository.objects.get(name=db_repo).delete()
 

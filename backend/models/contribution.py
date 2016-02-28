@@ -2,6 +2,7 @@ import arrow
 import mongoengine
 
 from backend.models.abstract import AbstractContribution
+from cub.settings import DATA_FORMAT
 
 
 class CommitContribution(AbstractContribution):
@@ -30,7 +31,7 @@ class PRContribution(AbstractContribution):
                     cub_account=account, html_url=raw_data['html_url'])[0]
 
         if (arrow.get(pr.updated_at) >=
-                arrow.get(raw_data['updated_at'], 'YYYY-MM-DDTHH:mm:ss')):
+                arrow.get(raw_data['updated_at'], DATA_FORMAT)):
             return pr
 
         data = PRContribution.transform(account, raw_data)
