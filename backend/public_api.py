@@ -30,6 +30,7 @@ class ContactResource(resources.MongoEngineResource):
 class RepositoryResource(resources.MongoEngineResource):
     class Meta:
         queryset = Repository.objects.all()
+        resource_name = 'repository'
         excludes = ['updated_at', 'created_at', 'id', 'cub_account', 'url']
         filtering = {'name': ALL, 'affiliation': ALL}
         allowed_methods = ['get']
