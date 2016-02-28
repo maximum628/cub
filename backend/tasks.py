@@ -1,10 +1,9 @@
 import time
 
-from cub import celery_app
-
 from backend.contribution import get_repos, get_pulls, get_score, delete_repos
 from backend.models.account import Account
-from cub.settings import CONTRIB_DELTA
+from cub import celery_app
+from cub.settings import CONTRIB_DELTA, MONGO_CONFIG
 
 
 def get_contributions(account):
